@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{3a24504f-8773-4daa-bd88-f48b7d10d7f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{b0bb8686-4101-45b4-9755-36d166957dbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{eeeb978f-3b62-41c6-a30a-5c99231d1a7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Player">
+      <UniqueIdentifier>{ccb54703-7257-428b-b0f7-23843d24bcfb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="useful">
+      <UniqueIdentifier>{c437d8d1-1d3c-41af-832f-23842fac98c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lucmin">
+      <UniqueIdentifier>{8324339d-13b3-40b6-99cc-88d0908b65b6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="manager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="debugproc.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="input.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sound.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="object.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="light.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="fade.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="object2D.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="object3D.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="objectX.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="game.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="wall.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="field.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
+    <ClCompile Include="modelHierarchy.cpp">
+      <Filter>useful</Filter>
+    </ClCompile>
+    <ClCompile Include="texture.cpp">
+      <Filter>useful</Filter>
+    </ClCompile>
+    <ClCompile Include="material.cpp">
+      <Filter>useful</Filter>
+    </ClCompile>
+    <ClCompile Include="motion.cpp">
+      <Filter>useful</Filter>
+    </ClCompile>
+    <ClCompile Include="model.cpp">
+      <Filter>useful</Filter>
+    </ClCompile>
+    <ClCompile Include="lucmin.cpp">
+      <Filter>Lucmin</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="main.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="manager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="debugproc.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="input.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sound.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="object.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="light.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="fade.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="object2D.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="object3D.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="objectX.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="game.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="wall.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="field.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="modelHierarchy.h">
+      <Filter>useful</Filter>
+    </ClInclude>
+    <ClInclude Include="material.h">
+      <Filter>useful</Filter>
+    </ClInclude>
+    <ClInclude Include="texture.h">
+      <Filter>useful</Filter>
+    </ClInclude>
+    <ClInclude Include="motion.h">
+      <Filter>useful</Filter>
+    </ClInclude>
+    <ClInclude Include="model.h">
+      <Filter>useful</Filter>
+    </ClInclude>
+    <ClInclude Include="lucmin.h">
+      <Filter>Lucmin</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

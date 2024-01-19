@@ -1,0 +1,13 @@
+﻿  manager.cpp
+C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\object.h(84,70): warning C4100: 'fHeight': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\object.h(84,56): warning C4100: 'fWidth': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\object.h(84,45): warning C4100: 'pos': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\object.h(84,27): warning C4100: 'type': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\object.h(85,70): warning C4100: 'fHeight': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\object.h(85,56): warning C4100: 'fWidth': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\object.h(85,45): warning C4100: 'rot': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\object.h(85,27): warning C4100: 'type': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\object.h(86,34): warning C4100: 'rot': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\object.h(87,35): warning C4100: 'size': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\object.h(96,30): warning C4100: 'state': 引数は関数の本体部で 1 度も参照されません。
+  JobFreeGame.vcxproj -> C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\Debug\JobFreeGame.exe
