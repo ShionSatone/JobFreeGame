@@ -1,13 +1,22 @@
-﻿  manager.cpp
-C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\object.h(84,70): warning C4100: 'fHeight': 引数は関数の本体部で 1 度も参照されません。
-C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\object.h(84,56): warning C4100: 'fWidth': 引数は関数の本体部で 1 度も参照されません。
-C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\object.h(84,45): warning C4100: 'pos': 引数は関数の本体部で 1 度も参照されません。
-C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\object.h(84,27): warning C4100: 'type': 引数は関数の本体部で 1 度も参照されません。
-C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\object.h(85,70): warning C4100: 'fHeight': 引数は関数の本体部で 1 度も参照されません。
-C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\object.h(85,56): warning C4100: 'fWidth': 引数は関数の本体部で 1 度も参照されません。
-C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\object.h(85,45): warning C4100: 'rot': 引数は関数の本体部で 1 度も参照されません。
-C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\object.h(85,27): warning C4100: 'type': 引数は関数の本体部で 1 度も参照されません。
-C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\object.h(86,34): warning C4100: 'rot': 引数は関数の本体部で 1 度も参照されません。
-C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\object.h(87,35): warning C4100: 'size': 引数は関数の本体部で 1 度も参照されません。
-C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\object.h(96,30): warning C4100: 'state': 引数は関数の本体部で 1 度も参照されません。
-  JobFreeGame.vcxproj -> C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\Debug\JobFreeGame.exe
+﻿  lucmin.cpp
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(85,70): warning C4100: 'fHeight': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(85,56): warning C4100: 'fWidth': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(85,45): warning C4100: 'pos': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(85,27): warning C4100: 'type': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(86,70): warning C4100: 'fHeight': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(86,56): warning C4100: 'fWidth': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(86,45): warning C4100: 'rot': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(86,27): warning C4100: 'type': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(87,34): warning C4100: 'rot': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(88,35): warning C4100: 'size': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(97,30): warning C4100: 'state': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\motion.h(88,42): warning C4100: 'nNumModel': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\lucmin.cpp(262,10): warning C4189: 'pSound': ローカル変数が初期化されましたが、参照されていません
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\lucmin.cpp(259,18): warning C4189: 'pInputKeyboard': ローカル変数が初期化されましたが、参照されていません
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\lucmin.cpp(261,11): warning C4189: 'pPlayer': ローカル変数が初期化されましたが、参照されていません
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\lucmin.cpp(260,11): warning C4189: 'pCamera': ローカル変数が初期化されましたが、参照されていません
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\lucmin.cpp(352,11): warning C4189: 'pPlayer': ローカル変数が初期化されましたが、参照されていません
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\lucmin.cpp(353,11): warning C4189: 'pCamera': ローカル変数が初期化されましたが、参照されていません
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\lucmin.cpp(492,8): warning C4189: 'fRotDest': ローカル変数が初期化されましたが、参照されていません
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\lucmin.cpp(488,11): warning C4189: 'pCamera': ローカル変数が初期化されましたが、参照されていません
+  JobFreeGame.vcxproj -> C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\Debug\JobFreeGame.exe

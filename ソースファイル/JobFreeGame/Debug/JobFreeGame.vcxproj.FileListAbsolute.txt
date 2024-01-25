@@ -1,1 +1,2 @@
 C:\Users\student\Documents\Visual Studio 2019\Project\就活作品\JobFreeGame\Debug\JobFreeGame.exe
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\Debug\JobFreeGame.exe

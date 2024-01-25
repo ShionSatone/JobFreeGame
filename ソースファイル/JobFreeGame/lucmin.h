@@ -41,7 +41,7 @@ public:
 	// 設定処理
 	void SetPos(D3DXVECTOR3 pos) { m_pos = pos; }		// 位置設定
 	void SetRot(D3DXVECTOR3 rot) { m_rot = rot; }		// 向き設定
-	void SetState(STATE state) { m_state = state; }		// 状態設定
+	//void SetState(STATE state) { m_state = state; }		// 状態設定
 
 	//取得処理
 	D3DXVECTOR3 GetPos(void) { return m_pos; }			// 位置取得
@@ -49,22 +49,21 @@ public:
 
 	D3DXVECTOR3 GetSizeMin(void) { return m_min; }		// 大きさの最大値取得
 	D3DXVECTOR3 GetSizeMax(void) { return m_max; }		// 大きさの最小値取得
-	STATE GetState(void) { return m_state; }			// 状態取得
+	//STATE GetState(void) { return m_state; }			// 状態取得
 
 private:
 
-	//ルクミンの行動状態
-	enum ENEMYSTATE
+	//ルクミンのモーション状態
+	enum MOTIONSTATE
 	{
-		ENEMYSTATE_NONE = 0,		// 何もしてない状態
-		ENEMYSTATE_MOVE,			// 歩いてる状態
-		ENEMYSTATE_JUMP,			// ジャンプ状態
-		ENEMYSTATE_LAND,			// 着地状態
-		ENEMYSTATE_DASH,			// ダッシュ状態
-		ENEMYSTATE_MAX
+		MOTIONSTATE_NONE = 0,		// 何もしてない状態
+		MOTIONSTATE_MOVE,			// 歩いてる状態
+		MOTIONSTATE_JUMP,			// ジャンプ状態
+		MOTIONSTATE_LAND,			// 着地状態
+		MOTIONSTATE_MAX
 	};
 
-	//敵のパーツ
+	//ルクミンのパーツ
 	enum PARTS
 	{
 		PARTS_BODY = 0,		// [0]体
@@ -87,14 +86,12 @@ private:
 	};
 
 	void UpdateState(void);			// 状態の更新処理
-
-	void MotionManager(void);				// モーション管理
-
+	void MotionManager(void);		// モーション管理
 	void FollowMove(void);			// プレイヤーについていく処理
 
 	void Screen(void);						// 画面外判定
 	void LoadFile(void);					// モデルファイル読み込み
-	void RotCorrection(void);				// 向きの補正処理
+	void RotNormalize(void);				// 向きの補正処理
 											   
 	static char *m_apFileName[PARTS_MAX];		// ファイル名
 	static int m_nNumAll;						// 敵の総数
@@ -106,6 +103,7 @@ private:
 
 	D3DXVECTOR3 m_move;		// 移動量
 	D3DXVECTOR3 m_rot;		// 向き
+	D3DXVECTOR3 m_rotDest;	// 目的の向き
 	D3DXVECTOR3 m_max;		// 人間の最大値
 	D3DXVECTOR3 m_min;		// 人間の最小値
 	D3DXMATRIX m_mtxWorld;	// ワールドマトリックス
@@ -120,7 +118,7 @@ private:
 	float m_fRotDiff;		// 差分
 
 	STATE m_state;			// 敵の状態
-	ENEMYSTATE m_enemyState;		// 敵の動きの状態
+	MOTIONSTATE m_MotionState;		// 敵の動きの状態
 
 	CMotion *m_pMotion;		// モーション情報
 };

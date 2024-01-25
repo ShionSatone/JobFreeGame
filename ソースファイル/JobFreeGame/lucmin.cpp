@@ -29,7 +29,8 @@
 #define ADD_MOVE_Y			(1.5f)		//移動量Y加算する数
 #define JUMP_HEIGHT			(10.0f)		//ジャンプの高さ
 #define MAX_STR				(128)		//文字の最大数
-#define MOVE				(0.6f)		//移動量
+#define MOVE				(6.0f)		//移動量
+#define MOVE_DISTANCE		(200.0f)	//移動距離
 #define FILE_ENEMY			"data\\TXT\\motion_player.txt"		//敵モデルのテキスト
 
 #define HIT_CNT				(60 * 2)	//攻撃当たるまでのカウント数
@@ -40,22 +41,22 @@
 int CLucmin::m_nNumAll = 0;						//敵の総数
 char *CLucmin::m_apFileName[PARTS_MAX] =
 {
-	"data\\MODEL\\enemy\\00_body.x",
-	"data\\MODEL\\enemy\\01_head.x",
-	"data\\MODEL\\enemy\\02_hair.x",
-	"data\\MODEL\\enemy\\03_LU_arm.x",
-	"data\\MODEL\\enemy\\04_LD_arm.x",
-	"data\\MODEL\\enemy\\05_L_hand.x",
-	"data\\MODEL\\enemy\\06_RU_arm.x",
-	"data\\MODEL\\enemy\\07_RD_arm.x",
-	"data\\MODEL\\enemy\\08_R_arm.x",
-	"data\\MODEL\\enemy\\09_waist.x",
-	"data\\MODEL\\enemy\\10_LU_leg.x",
-	"data\\MODEL\\enemy\\11_LD_leg.x",
-	"data\\MODEL\\enemy\\12_L_shoe.x",
-	"data\\MODEL\\enemy\\13_RU_leg.x",
-	"data\\MODEL\\enemy\\14_RD_leg.x",
-	"data\\MODEL\\enemy\\15_R_shoe.x",
+	"data\\MODEL\\player\\00_body.x",
+	"data\\MODEL\\player\\01_head.x",
+	"data\\MODEL\\player\\02_hair.x",
+	"data\\MODEL\\player\\03_LU_arm.x",
+	"data\\MODEL\\player\\04_LD_arm.x",
+	"data\\MODEL\\player\\05_L_hand.x",
+	"data\\MODEL\\player\\06_RU_arm.x",
+	"data\\MODEL\\player\\07_RD_arm.x",
+	"data\\MODEL\\player\\08_R_arm.x",
+	"data\\MODEL\\player\\09_waist.x",
+	"data\\MODEL\\player\\10_LU_leg.x",
+	"data\\MODEL\\player\\11_LD_leg.x",
+	"data\\MODEL\\player\\12_L_shoe.x",
+	"data\\MODEL\\player\\13_RU_leg.x",
+	"data\\MODEL\\player\\14_RD_leg.x",
+	"data\\MODEL\\player\\15_R_shoe.x",
 
 };
 
@@ -69,6 +70,7 @@ CLucmin::CLucmin()
 	m_posDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 目的の位置
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 移動量
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 向き
+	m_rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 目的の向き
 	m_max = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// モデルの最大値
 	m_min = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// モデルの最小値
 
@@ -107,6 +109,7 @@ CLucmin::CLucmin(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_max = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// モデルの最大値
 	m_min = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// モデルの最小値
 	m_rot = rot;		//向き
+	m_rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 目的の向き
 
 	for (int nCntEnemy = 0; nCntEnemy < PARTS_MAX; nCntEnemy++)
 	{
@@ -261,20 +264,27 @@ void CLucmin::Update(void)
 	//前回の位置更新
 	m_posOld = m_pos;
 
-	D3DXCOLOR RandCol = D3DXCOLOR((rand() % 15 + 5) * 0.1f, (rand() % 15 + 5) * 0.1f, (rand() % 15 + 5) * 0.1f, 0.7f);
-
-
 	//当たり判定
-	CObjectX::CollisionEnemy(&m_pos, &m_posOld, &m_move, m_min, m_max);
+	//CObjectX::CollisionEnemy(&m_pos, &m_posOld, &m_move, m_min, m_max);
+
+	// 追尾処理
+	FollowMove();
+
+	// 位置加算
+	m_pos += m_move;
+
+	// 慣性付与
+	m_move.x += (0.0f - m_move.x) * 0.1f;
+	m_move.z += (0.0f - m_move.z) * 0.1f;
 
 	//状態更新
-	CLucmin::UpdateState();
+	UpdateState();
 
 	//向きの補正
-	CLucmin::RotCorrection();
+	RotNormalize();
 
 	//モーション管理
-	CLucmin::MotionManager();
+	MotionManager();
 
 	//モーションの更新処理
 	m_pMotion->Update();
@@ -297,28 +307,38 @@ void CLucmin::Update(void)
 //==============================================================
 void CLucmin::UpdateState(void)
 {
-	CPlayer *pPlayer = CGame::GetPlayer();
-	CCamera *pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
+	STATE state = GetState();		// 状態取得
 
-	switch (m_enemyState)
+	switch (state)
 	{
-	case ENEMYSTATE_NONE:		//何もしてない(止まってる状態)
+	case STATE_NONE:		// 何もしてない状態
 
 		break;
 
-	case ENEMYSTATE_MOVE:		//歩いてる状態
+	case STATE_ATTACK:		// 攻撃状態
 
 		break;
 
-	case ENEMYSTATE_JUMP:		//ジャンプしてる状態
+	case STATE_DAMAGE:		// ダメージ状態
 
 		break;
 
-	case ENEMYSTATE_LAND:		//着地した状態
+	case STATE_DEATH:		// 死亡状態
 
 		break;
 
-	case ENEMYSTATE_DASH:		//ダッシュ状態
+	case STATE_APPEAR:		// 点滅状態
+
+		break;
+
+	case STATE_FOLLOW:		// 追尾状態
+
+		break;
+
+	default:
+
+		// 停止する
+		assert(false);
 
 		break;
 	}
@@ -329,6 +349,35 @@ void CLucmin::UpdateState(void)
 //==============================================================
 void CLucmin::MotionManager(void)
 {
+	CPlayer* pPlayer = CGame::GetPlayer();
+	CCamera* pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
+
+	//switch (m_MotionState)
+	//{
+	//case MOTIONSTATE_NONE:		//何もしてない(止まってる状態)
+
+	//	break;
+
+	//case MOTIONSTATE_MOVE:		//歩いてる状態
+
+	//	break;
+
+	//case MOTIONSTATE_JUMP:		//ジャンプしてる状態
+
+	//	break;
+
+	//case MOTIONSTATE_LAND:		//着地した状態
+
+	//	break;
+
+	//default:
+
+	//	// 停止する
+	//	assert(false);
+
+	//	break;
+	//}
+
 	//if (m_bMove == true && m_pMotion->GetType() == m_pMotion->MOTIONTYPE_NEUTRAL)
 	//{//歩いてる && 待機状態
 
@@ -348,7 +397,7 @@ void CLucmin::MotionManager(void)
 //==============================================================
 //向きの補正処理
 //==============================================================
-void CLucmin::RotCorrection(void)
+void CLucmin::RotNormalize(void)
 {
 	//向きの差分を求める
 	m_fRotDiff = m_fRotDest - m_rot.y;
@@ -436,12 +485,25 @@ void CLucmin::Draw(void)
 //==============================================================
 void CLucmin::FollowMove(void)
 {
+	CCamera* pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
 	CPlayer* pPlayer = CManager::GetInstance()->GetScene()->GetGame()->GetPlayer();		// プレイヤーの情報取得
+	D3DXVECTOR3 posPlayer = pPlayer->GetPos();
+	D3DXVECTOR3 rotPlayer = pPlayer->GetRot();
+	float fRotDest = 0.0f;
 
 	// 目的の位置
-	m_posDest = pPlayer->GetPos();
+	m_posDest.x = m_pos.x - posPlayer.x;
+	m_posDest.z = m_pos.z - posPlayer.z;
 
-	//m_pos.x = m_posDest.x 
+	m_fRotDest = atan2f(m_posDest.x, m_posDest.z);
+
+	if (((m_pos.x - posPlayer.x) > MOVE_DISTANCE || (m_pos.x - posPlayer.x) < -MOVE_DISTANCE) ||
+		((m_pos.z - posPlayer.z) > MOVE_DISTANCE || (m_pos.z - posPlayer.z) < -MOVE_DISTANCE))
+	{
+		// 移動量加算
+		m_move.x = sinf(m_fRotDest + D3DX_PI) * MOVE;
+		m_move.z = cosf(m_fRotDest + D3DX_PI) * MOVE;
+	}
 }
 
 //==============================================================

@@ -105,7 +105,7 @@ private:
 
 	void Screen(void);						// 画面外判定
 	void LoadFile(void);					// モデルファイル読み込み
-	void RotCorrection(void);				// 向きの補正処理
+	void RotNormalize(void);				// 向きの補正処理
 	void SEStep(void);				// 足音鳴らす処理
 	void CollisionAction(void);		// 当たった時の処理
 

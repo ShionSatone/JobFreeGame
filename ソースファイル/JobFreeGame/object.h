@@ -20,7 +20,7 @@ class CObject
 public:
 
 	//オブジェクトの種類
-	typedef enum
+	enum TYPE
 	{
 		TYPE_NONE = 0,		// 何もなし
 		TYPE_PLAYER,		// プレイヤー
@@ -38,10 +38,10 @@ public:
 		TYPE_FADE,			// フェード
 
 		TYPE_MAX			// 種類の最大数
-	} TYPE;
+	};
 
 	//パーティクルの種類
-	typedef enum
+	enum PARTICLETYPE
 	{
 		PARTICLETYPE_NONE = 0,		//何もなし
 		PARTICLETYPE_ENEMY,			//敵の弾
@@ -49,10 +49,10 @@ public:
 		PARTICLETYPE_LAND,			//着地
 		PARTICLETYPE_MOVE,			//移動
 		PARTICLETYPE_MAX
-	} PARTICLETYPE;
+	};
 
 	//オブジェクトの状態
-	typedef enum
+	enum STATE
 	{
 		STATE_NONE = 0,		//通常状態
 		STATE_ATTACK,		//攻撃状態
@@ -60,8 +60,9 @@ public:
 		STATE_DEATH,		//死亡状態
 		STATE_APPEAR,		//点滅状態
 		STATE_WAIT,			//待ち状態
+		STATE_FOLLOW,		//追尾状態
 		STATE_MAX
-	} STATE;
+	};
 
 	CObject();				//コンストラクタ
 	CObject(TYPE type);		//コンストラクタのオーバーロード

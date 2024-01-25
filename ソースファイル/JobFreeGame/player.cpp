@@ -28,7 +28,7 @@
 #define MAX_STR				(128)		//文字の最大数
 #define FRONT_MOVE			(0.6f)		//手前の時の移動量
 #define STOP_MOVE			(0.8f)		//止まる判定の移動量
-#define FILE_HUMAN			"data\\TEXT\\motion_player.txt"		//プレイヤーモデルのテキスト
+#define FILE_HUMAN			"data\\TXT\\motion_player.txt"		//プレイヤーモデルのテキスト
 
 #define HIT_CNT				(60 * 2)	//攻撃当たるまでのカウント数
 #define DAMAGE_CNT			(9)			//ダメージカウント数
@@ -222,7 +222,7 @@ HRESULT CPlayer::Init(void)
 
 	m_max.y += 40.0f;
 
-	CObject::SetType(CObject::TYPE_PLAYER);
+	SetType(CObject::TYPE_PLAYER);
 
 	return S_OK;
 }
@@ -252,7 +252,7 @@ void CPlayer::Uninit(void)
 	}
 
 	//オブジェクト（自分自身の破棄）
-	CObject::Release();
+	Release();
 }
 
 //==============================================================
@@ -287,7 +287,7 @@ void CPlayer::Update(void)
 	CPlayer::UpdateState();
 
 	//向きの補正
-	CPlayer::RotCorrection();
+	CPlayer::RotNormalize();
 
 	//画面外処理
 	CPlayer::Screen();
@@ -420,7 +420,7 @@ void CPlayer::MotionManager(void)
 //==============================================================
 //向きの補正処理
 //==============================================================
-void CPlayer::RotCorrection(void)
+void CPlayer::RotNormalize(void)
 {
 	//向きの差分を求める
 	m_fRotDiff = m_fRotDest - m_rot.y;
@@ -631,9 +631,9 @@ void CPlayer::ControlKeyboardMove(void)
 //==============================================================
 void CPlayer::Screen(void)
 {
-	if (m_pos.y <= 100.0f)
+	if (m_pos.y <= 0.0f)
 	{
-		m_pos.y = 100.0f;
+		m_pos.y = 0.0f;
 		m_move.y = 0.0f;
 	}
 
