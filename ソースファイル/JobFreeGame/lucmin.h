@@ -27,6 +27,29 @@ class CLucmin : public CObject
 {
 public:
 
+	// ルクミンの状態
+	enum STATE
+	{
+		STATE_NONE = 0,		// 通常状態
+		STATE_FOLLOW,		// 追尾状態
+		STATE_THROW,		// 投げられてる状態
+		STATE_SEARCH,		// 探す状態
+		STATE_ATTACK,		// 攻撃状態
+		STATE_CALL,			// 呼ばれる状態
+		STATE_DAMAGE,		// ダメージ状態
+		STATE_DEATH,		// 死亡状態
+		STATE_MAX
+	};
+
+	//投げる状態
+	enum THROWSTATE
+	{
+		THROWSTATE_NONE = 0,		// 何もない状態
+		THROWSTATE_STANDBY,			// 準備状態
+		THROWSTATE_THROW,			// 投げる状態
+		THROWSTATE_MAX
+	};
+
 	CLucmin();		//コンストラクタ
 	CLucmin(D3DXVECTOR3 pos, D3DXVECTOR3 rot);		//コンストラクタ(オーバーロード)
 	~CLucmin();		//デストラクタ
@@ -41,7 +64,7 @@ public:
 	// 設定処理
 	void SetPos(D3DXVECTOR3 pos) { m_pos = pos; }		// 位置設定
 	void SetRot(D3DXVECTOR3 rot) { m_rot = rot; }		// 向き設定
-	//void SetState(STATE state) { m_state = state; }		// 状態設定
+	void SetState(STATE state) { m_state = state; }		// 状態設定
 
 	//取得処理
 	D3DXVECTOR3 GetPos(void) { return m_pos; }			// 位置取得
@@ -49,7 +72,7 @@ public:
 
 	D3DXVECTOR3 GetSizeMin(void) { return m_min; }		// 大きさの最大値取得
 	D3DXVECTOR3 GetSizeMax(void) { return m_max; }		// 大きさの最小値取得
-	//STATE GetState(void) { return m_state; }			// 状態取得
+	STATE GetState(void) { return m_state; }			// 状態取得
 
 private:
 
@@ -86,6 +109,8 @@ private:
 	};
 
 	void UpdateState(void);			// 状態の更新処理
+	void UpdateThrowState(void);	// 投げられ状態の更新処理
+
 	void MotionManager(void);		// モーション管理
 	void FollowMove(void);			// プレイヤーについていく処理
 
@@ -94,8 +119,8 @@ private:
 	void RotNormalize(void);				// 向きの補正処理
 											   
 	static char *m_apFileName[PARTS_MAX];		// ファイル名
-	static int m_nNumAll;						// 敵の総数
-	int m_nNum;									// 敵の番号
+	static int m_nNumAll;						// ルクミンの総数
+	int m_nIndex;								// ルクミンの番号
 
 	D3DXVECTOR3 m_pos;		// 位置
 	D3DXVECTOR3 m_posOld;	// 前回の位置
@@ -111,14 +136,12 @@ private:
 	int m_nNumModel;		// モデル(パーツ)の総数
 	int m_nCntDamage;		// ダメージカウンター
 
-	D3DXVECTOR3 m_rotSave;	// 向き保存用
-	D3DXVECTOR3 m_moveSave;	// 移動量保存用
-
 	float m_fRotDest;		// 目標
 	float m_fRotDiff;		// 差分
 
-	STATE m_state;			// 敵の状態
-	MOTIONSTATE m_MotionState;		// 敵の動きの状態
+	STATE m_state;			// ルクミンの状態
+	THROWSTATE m_throwState;		// ルクミンの投げられ状態
+	MOTIONSTATE m_MotionState;		// ルクミンの動きの状態
 
 	CMotion *m_pMotion;		// モーション情報
 };

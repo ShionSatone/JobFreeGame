@@ -80,14 +80,14 @@ void CDebugProc::Update(void)
 {
 	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();	// キーボードのポインタ
 
-#if _DEBUG
+//#if _DEBUG
 
 	if(pInputKeyboard->GetTrigger(DIK_F1) == true)
 	{//F1キーが押されたとき
 		m_bDisp = m_bDisp ? false : true;
 	}
 
-#endif // _DEBUG
+//#endif // _DEBUG
 
 
 	//操作方法
@@ -97,8 +97,11 @@ void CDebugProc::Update(void)
 
 	CDebugProc::Print("\n～プレイヤー操作方法～\n");
 	CDebugProc::Print("[W,A,S,D]：移動\n");
-	CDebugProc::Print("[SPACE]  ：ジャンプ\n");
-	CDebugProc::Print("[J]      ：ダッシュ(２回まで)\n");
+	CDebugProc::Print("      [L]：ルクミン投げる\n");
+
+
+	CDebugProc::Print("\n\n");
+
 
 }
 

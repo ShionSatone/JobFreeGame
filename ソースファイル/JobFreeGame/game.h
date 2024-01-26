@@ -12,7 +12,7 @@
 //**************************************************************
 //マクロ定義
 //**************************************************************
-#define MAX_ENEMY_POS		(70)		//保存する最大フレーム数
+#define MAX_LUCMIN		(128)		// ルクミンの最大数
 
 //**************************************************************
 //前方宣言
@@ -58,14 +58,14 @@ public:
 	static void SetGameMode(GAMEMODE gameMode) { m_gameMode = gameMode; }		//ゲームモードの設定
 	static GAMEMODE GetGameMode(void) { return m_gameMode; }					//ゲームモードの設定
 	static CPlayer *GetPlayer(void) { return m_pPlayer; }		//プレイヤーの情報取得
-	static CLucmin* GetLucmin(void) { return m_pLucmin; }		//ルクミンのs情報取得
+	static CLucmin* GetLucmin(int nIdx) { return m_pLucmin[nIdx]; }		//ルクミンのs情報取得
 	static CPause *GetPause(void) { return m_pPause; }			//ポーズ画面の情報
 	static bool GetPauseDisp(void) { return m_bPause; }			//ポーズしてるか取得
 
 private:
 
 	static CPlayer *m_pPlayer;		//プレイヤーの情報
-	static CLucmin* m_pLucmin;		//ルクミンの情報
+	static CLucmin* m_pLucmin[MAX_LUCMIN];		//ルクミンの情報
 	static CEdit *m_pEdit;			//エディットの情報
 	static CPause *m_pPause;		//ポーズ画面の情報
 	static CScore *m_pScore;		//スコアの情報

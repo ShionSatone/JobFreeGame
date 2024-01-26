@@ -94,8 +94,8 @@ public:
 	virtual D3DXVECTOR3 GetSizeMin(void) { return D3DXVECTOR3(0.0f, 0.0f, 0.0f);}	// モデルの最小値取得
 	virtual D3DXVECTOR3 GetSizeMax(void) { return D3DXVECTOR3(0.0f, 0.0f, 0.0f); }	// モデルの最大値取得
 
-	virtual void SetState(STATE state){}					//オブジェクトの状態設定
-	virtual STATE GetState(void) { return STATE_NONE; }		//オブジェクトの状態取得
+	//virtual void SetState(STATE state){}					//オブジェクトの状態設定
+	//virtual STATE GetState(void) { return STATE_NONE; }		//オブジェクトの状態取得
 
 	void SetType(TYPE type) { m_type = type; }	//オブジェクトの種類の設定
 	TYPE GetType(void) { return m_type; }		//オブジェクトの種類の取得
@@ -109,7 +109,7 @@ private:
 	static int m_nNumAll;	//オブジェクト総数
 	int m_nID;				//自分自身のID
 	TYPE m_type;			//オブジェクトの種類
-	STATE m_state;			//オブジェクトの状態
+	//STATE m_state;			//オブジェクトの状態
 
 	static CObject *m_pTop;		//先頭のオブジェクトへのポインタ
 	static CObject *m_pCur;		//最後尾のオブジェクトへのポインタ

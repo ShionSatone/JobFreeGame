@@ -17,6 +17,7 @@
 #include "sound.h"
 #include "fade.h"
 #include "model.h"
+#include "lucmin.h"
 //#include "particle.h"
 
 //マクロ定義
@@ -320,40 +321,36 @@ void CPlayer::UpdateState(void)
 
 	switch (m_state)
 	{
-	case STATE_NONE:		//通常状態
+	case STATE_NONE:		// 通常状態
 
 		break;
 
-	case STATE_ATTACK:		//攻撃状態
+	case STATE_THROW:		// 投げる状態
 
 		break;
 
-	case STATE_DAMAGE:		//ダメージ状態
+	case STATE_CALL:		// 呼びかけ状態
 
 		break;
 
-	case STATE_APPEAR:		//点滅状態
+	case STATE_DAMAGE:		// ダメージ状態
 
 		break;
 
-	case STATE_DEATH:		//死亡状態
+	case STATE_APPEAR:		// 点滅状態
 
 		break;
-	}
-}
 
-//==============================================================
-// 命令処理
-//==============================================================
-void CPlayer::Command(void)
-{
-	CInputKeyboard* pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	case STATE_DEATH:		// 死亡状態
 
-	if (pInputKeyboard->GetTrigger(DIK_L) == true)
-	{ // Lキーを押したとき
+		break;
 
-		// ルクミン投げる
-		CModel::Create(m_pos, m_rot, "data\\MODEL\\item_star.x");
+	default:
+
+		// 停止する
+		assert(false);
+
+		break;
 	}
 }
 
@@ -488,7 +485,7 @@ void CPlayer::ControlKeyboard(void)
 	ControlKeyboardMove();
 
 	// ルクミン命令処理
-	Command();
+	ControlKeyboardCommand();
 
 	// 移動量加算
 	m_pos += m_move;
@@ -579,6 +576,43 @@ void CPlayer::ControlKeyboardMove(void)
 	{//歩いてないとき
 
 		//m_bMove = false;		//歩いてない状態にする
+	}
+}
+
+//==============================================================
+// 命令処理
+//==============================================================
+void CPlayer::ControlKeyboardCommand(void)
+{
+	CInputKeyboard* pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	CLucmin* pLucmin = nullptr;		// ルクミンの情報
+	D3DXVECTOR3 posDest = D3DXVECTOR3(100.0f,0.0f,0.0f);
+	float fRotDest = 0.0f;
+
+	if (pInputKeyboard->GetTrigger(DIK_L) == true)
+	{ // Lキーを押したとき
+
+		// 投げる状態にする
+		m_state = STATE_THROW;
+
+		for (int nCnt = 0; nCnt < MAX_LUCMIN; nCnt++)
+		{
+			// ルクミンの情報取得
+			pLucmin = CManager::GetInstance()->GetScene()->GetGame()->GetLucmin(nCnt);
+
+			if (pLucmin != nullptr)
+			{ // ルクミンが NULL じゃないとき
+
+				if (pLucmin->GetState() != CLucmin::STATE_THROW && 
+					pLucmin->GetState() != CLucmin::STATE_CALL)
+				{ // ルクミンが投げられ状態 && 呼びかけ状態じゃないとき
+
+					pLucmin->SetState(CLucmin::STATE_THROW);		// 投げられ状態にする
+				}
+
+				break;
+			}
+		}
 	}
 }
 

@@ -181,7 +181,7 @@ void CObject3D::Draw(void)
 //==============================================================
 //オブジェクト3Dのサイズ設定処理
 //==============================================================
-void CObject3D::SetSize(D3DXVECTOR3 m_size)
+void CObject3D::SetSize(D3DXVECTOR3 size)
 {
 	VERTEX_3D *pVtx;		//頂点情報へのポインタ
 
@@ -189,10 +189,10 @@ void CObject3D::SetSize(D3DXVECTOR3 m_size)
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 	//頂点座標の設定
-	pVtx[0].pos = D3DXVECTOR3(-m_size.x, m_size.y, m_size.z);
-	pVtx[1].pos = D3DXVECTOR3(m_size.x, m_size.y, m_size.z);
-	pVtx[2].pos = D3DXVECTOR3(-m_size.x, -m_size.y, -m_size.z);
-	pVtx[3].pos = D3DXVECTOR3(m_size.x, -m_size.y, -m_size.z);
+	pVtx[0].pos = D3DXVECTOR3(-size.x, size.y, size.z);
+	pVtx[1].pos = D3DXVECTOR3(size.x, size.y, size.z);
+	pVtx[2].pos = D3DXVECTOR3(-size.x, -size.y, -size.z);
+	pVtx[3].pos = D3DXVECTOR3(size.x, -size.y, -size.z);
 
 	switch (m_type)
 	{

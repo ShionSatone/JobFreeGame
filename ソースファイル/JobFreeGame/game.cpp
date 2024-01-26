@@ -30,7 +30,7 @@
 //**************************************************************
 CEdit *CGame::m_pEdit = nullptr;				//エディットの情報
 CPlayer *CGame::m_pPlayer = nullptr;			//プレイヤーの情報
-CLucmin* CGame::m_pLucmin = nullptr;			//ルクミンの情報
+CLucmin* CGame::m_pLucmin[MAX_LUCMIN] = {};		//ルクミンの情報
 bool CGame::m_bReset = true;					//リセットしたかどうか
 bool CGame::m_bPause = false;					//ポーズ画面か
 CPause *CGame::m_pPause = nullptr;				//ポーズ画面の情報
@@ -84,7 +84,7 @@ HRESULT CGame::Init(void)
 	m_pPlayer = m_pPlayer->Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	// ルクミンの生成
-	CLucmin::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	m_pLucmin[0] = CLucmin::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//エディットの生成
 	//m_pEdit = CEdit::Create();

@@ -25,12 +25,12 @@ public:
 	//プレイヤーの状態
 	typedef enum
 	{
-		STATE_NONE = 0,		//通常状態
-		STATE_ATTACK,		//攻撃状態
-		STATE_DAMAGE,		//ダメージ状態
-		STATE_DEATH,		//死亡状態
-		STATE_APPEAR,		//点滅状態
-		STATE_WAIT,			//待ち状態
+		STATE_NONE = 0,		// 通常状態
+		STATE_THROW,		// 投げる状態
+		STATE_CALL,			// 呼びかけ状態
+		STATE_DAMAGE,		// ダメージ状態
+		STATE_APPEAR,		// 点滅状態
+		STATE_DEATH,		// 死亡状態
 		STATE_MAX
 	} STATE;
 
@@ -50,14 +50,15 @@ public:
 	// 設定処理
 	void SetPos(D3DXVECTOR3 pos) { m_pos = pos; }		// 位置設定
 	void SetRot(D3DXVECTOR3 rot) { m_rot = rot; }		// 向き設定
-	void SetState(STATE state) { m_state = state; }			// 状態設定
+	void SetState(STATE state) { m_state = state; }		// 状態設定
 
 	void SetDash(int nCntDash) { m_nDashCounter = nCntDash; }	// ダッシュ回数設定
 
 	// 取得処理
 	D3DXVECTOR3 GetPos(void) { return m_pos; }			// 位置取得
 	D3DXVECTOR3 GetRot(void) { return m_rot; }			// 向き取得
-	D3DXVECTOR3 GetMove(void) { return m_move; }			// 移動量取得
+	D3DXVECTOR3 GetMove(void) { return m_move; }		// 移動量取得
+	STATE GetState(void) { return m_state; }			// 状態取得
 
 	//bool GetIsJump(void) { return m_bJump; }				// ジャンプの取得
 	//bool GetIsMove(void) { return m_bMove; }				// 移動の取得
@@ -101,7 +102,7 @@ private:
 	//void ControlJoyPad(void);				// パッド操作
 	//void ControltJoyPadMove(void);		// パッドの移動操作
 
-	void Command(void);				// 命令処理
+	void ControlKeyboardCommand(void);		// 命令処理
 
 	void Screen(void);						// 画面外判定
 	void LoadFile(void);					// モデルファイル読み込み

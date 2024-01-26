@@ -1,6 +1,6 @@
 //==============================================================
 //
-//敵の処理[lucmin.h]
+//ルクミンの処理[lucmin.h]
 //Author:佐藤根詩音
 //
 //==============================================================
@@ -25,20 +25,20 @@
 #define CURVE_RL			(0.5f)		//左右の角度
 #define CURVE_UP			(0.0f)		//上の角度
 #define CURVE_DOWN			(1.0f)		//下の角度
-#define MOVE_Y				(0.7f)		//移動量Y
-#define ADD_MOVE_Y			(1.5f)		//移動量Y加算する数
-#define JUMP_HEIGHT			(10.0f)		//ジャンプの高さ
+
+#define GRAVITY				(-1.0f)		//重力
+#define THROW_HEIGHT		(15.0f)		//投げられる高さ
 #define MAX_STR				(128)		//文字の最大数
 #define MOVE				(6.0f)		//移動量
 #define MOVE_DISTANCE		(200.0f)	//移動距離
-#define FILE_ENEMY			"data\\TXT\\motion_player.txt"		//敵モデルのテキスト
+#define FILE_ENEMY			"data\\TXT\\motion_player.txt"		//ルクミンモデルのテキスト
 
 #define HIT_CNT				(60 * 2)	//攻撃当たるまでのカウント数
 #define DAMAGE_CNT			(9)			//ダメージカウント数
 #define APP_CNT				(100)		//点滅時間
 
 //静的メンバ変数宣言
-int CLucmin::m_nNumAll = 0;						//敵の総数
+int CLucmin::m_nNumAll = 0;						//ルクミンの総数
 char *CLucmin::m_apFileName[PARTS_MAX] =
 {
 	"data\\MODEL\\player\\00_body.x",
@@ -76,22 +76,20 @@ CLucmin::CLucmin()
 
 	for (int nCntEnemy = 0; nCntEnemy < PARTS_MAX; nCntEnemy++)
 	{
-		m_apModel[nCntEnemy] = NULL;		//敵(パーツ)へのポインタ
+		m_apModel[nCntEnemy] = NULL;		//ルクミン(パーツ)へのポインタ
 	}
 
-	m_nNumModel = 0;		//敵(パーツ)の総数
+	m_nNumModel = 0;		//ルクミン(パーツ)の総数
 	m_pMotion = NULL;
-
-	m_rotSave = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//向き保存用
-	m_moveSave = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//移動量保存用
 
 	m_fRotDest = 0.0f;		//目標
 	m_fRotDiff = 0.0f;		//差分
 
-	m_state = STATE_NONE;			//状態
+	m_state = STATE_FOLLOW;			//状態
+	m_throwState = THROWSTATE_NONE;		// 投げられ状態
 	m_nCntDamage = 0;				//ダメージカウンター
 
-	m_nNum = m_nNumAll;
+	m_nIndex = m_nNumAll;
 
 	m_nNumAll++;
 
@@ -113,19 +111,21 @@ CLucmin::CLucmin(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 
 	for (int nCntEnemy = 0; nCntEnemy < PARTS_MAX; nCntEnemy++)
 	{
-		m_apModel[nCntEnemy] = NULL;		//敵(パーツ)へのポインタ
+		m_apModel[nCntEnemy] = NULL;		//ルクミン(パーツ)へのポインタ
 	}
 
 	m_pMotion = NULL;		//モーションの情報
-	m_nNumModel = 0;		//敵(パーツ)の総数
+	m_nNumModel = 0;		//ルクミン(パーツ)の総数
 
 	m_fRotDest = 0.0f;	//目標
 	m_fRotDiff = 0.0f;	//差分
 
-	m_state = STATE_NONE;		//状態
+	m_state = STATE_FOLLOW;		//状態
+	m_throwState = THROWSTATE_NONE;		// 投げられ状態
+
 	m_nCntDamage = 0;			//ダメージカウンター
 
-	m_nNum = m_nNumAll;
+	m_nIndex = m_nNumAll;
 
 	m_nNumAll++;
 }
@@ -139,7 +139,7 @@ CLucmin::~CLucmin()
 }
 
 //==============================================================
-//敵の生成処理
+//ルクミンの生成処理
 //==============================================================
 CLucmin *CLucmin::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
@@ -148,7 +148,7 @@ CLucmin *CLucmin::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	if (pEnemyModel == NULL)
 	{//メモリが使用されてなかったら
 
-		//敵の生成
+		//ルクミンの生成
 		pEnemyModel = new CLucmin(pos, rot);
 	}
 
@@ -159,13 +159,13 @@ CLucmin *CLucmin::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 }
 
 //==============================================================
-//敵の初期化処理
+//ルクミンの初期化処理
 //==============================================================
 HRESULT CLucmin::Init(void)
 {
 	m_fRotDest = m_rot.y;
 
-	//敵の生成（全パーツ分）
+	//ルクミンの生成（全パーツ分）
 	for (int nCntModel = 0; nCntModel < PARTS_MAX; nCntModel++)
 	{
 		m_apModel[nCntModel] = m_apModel[nCntModel]->Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), m_apFileName[nCntModel]);
@@ -223,7 +223,7 @@ HRESULT CLucmin::Init(void)
 }
 
 //==============================================================
-//敵の終了処理
+//ルクミンの終了処理
 //==============================================================
 void CLucmin::Uninit(void)
 {
@@ -251,7 +251,7 @@ void CLucmin::Uninit(void)
 }
 
 //==============================================================
-//敵の更新処理
+//ルクミンの更新処理
 //==============================================================
 void CLucmin::Update(void)
 {
@@ -267,11 +267,11 @@ void CLucmin::Update(void)
 	//当たり判定
 	//CObjectX::CollisionEnemy(&m_pos, &m_posOld, &m_move, m_min, m_max);
 
-	// 追尾処理
-	FollowMove();
-
 	// 位置加算
 	m_pos += m_move;
+
+	// 画面外処理
+	Screen();
 
 	// 慣性付与
 	m_move.x += (0.0f - m_move.x) * 0.1f;
@@ -290,16 +290,16 @@ void CLucmin::Update(void)
 	m_pMotion->Update();
 
 	//状態設定
-	for (int nCntEnemy = 0; nCntEnemy < PARTS_MAX; nCntEnemy++)
+	/*for (int nCntEnemy = 0; nCntEnemy < PARTS_MAX; nCntEnemy++)
 	{
 		m_apModel[nCntEnemy]->SetState(m_state);
 
-	}
+	}*/
 
 	//デバッグ表示
-	pDebugProc->Print("\n敵の位置 (%f, %f, %f)\n", m_pos.x, m_pos.y, m_pos.z);
-	pDebugProc->Print("敵の移動量 (%f, %f, %f)\n", m_move.x, m_move.y, m_move.z);
-	pDebugProc->Print("敵の向き   (%f, %f, %f)\n", m_rot.x, m_rot.y, m_rot.z);
+	pDebugProc->Print("\nルクミンの位置 (%f, %f, %f)\n", m_pos.x, m_pos.y, m_pos.z);
+	pDebugProc->Print("ルクミンの移動量 (%f, %f, %f)\n", m_move.x, m_move.y, m_move.z);
+	pDebugProc->Print("ルクミンの向き   (%f, %f, %f)\n", m_rot.x, m_rot.y, m_rot.z);
 }
 
 //==============================================================
@@ -307,31 +307,116 @@ void CLucmin::Update(void)
 //==============================================================
 void CLucmin::UpdateState(void)
 {
-	STATE state = GetState();		// 状態取得
-
-	switch (state)
+	switch (m_state)
 	{
 	case STATE_NONE:		// 何もしてない状態
+		break;
+
+	case STATE_FOLLOW:		// 追尾状態
+
+		// 追尾処理
+		FollowMove();
 
 		break;
 
+	case STATE_THROW:		// 投げられてる状態
+
+		if (m_throwState == THROWSTATE_NONE)
+		{ // 何もしてない状態の場合
+
+			m_throwState = THROWSTATE_STANDBY;		// 投げられ準備の状態にする
+		}
+
+		// 投げられ状態の更新
+		UpdateThrowState();
+
+		break;
+
+	case STATE_SEARCH:		// 探す状態
+		break;
+
 	case STATE_ATTACK:		// 攻撃状態
+		break;
+
+	case STATE_CALL:		// 呼び戻される状態
+
+		// 追尾処理
+		FollowMove();
 
 		break;
 
 	case STATE_DAMAGE:		// ダメージ状態
-
 		break;
 
 	case STATE_DEATH:		// 死亡状態
+		break;
+
+	default:
+
+		// 停止する
+		assert(false);
+
+		break;
+	}
+}
+
+//==============================================================
+// 投げられ状態の更新処理
+//==============================================================
+void CLucmin::UpdateThrowState(void)
+{
+	CPlayer* pPlayer = CManager::GetInstance()->GetScene()->GetGame()->GetPlayer();		// プレイヤーの情報取得
+	D3DXVECTOR3 posPlayer = pPlayer->GetPos();
+	D3DXVECTOR3 rotPlayer = pPlayer->GetRot();
+	D3DXVECTOR3 posDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 目的の位置
+	float fMoveSpeedX = 0.12f;
+	float fMoveSpeedZ = 0.12f;
+
+	switch (m_throwState)
+	{
+	case CLucmin::THROWSTATE_NONE:		// 何もしてない状態
 
 		break;
 
-	case STATE_APPEAR:		// 点滅状態
+	case CLucmin::THROWSTATE_STANDBY:	// 準備状態
+
+		// プレイヤーの位置から投げられるようにする
+		m_pos.x = posPlayer.x;
+		m_pos.z = posPlayer.z;
+
+		// ルクミン投げられる高さ加算
+		m_move.y += THROW_HEIGHT;
+
+		// 目的の位置設定
+		m_posDest.x = posPlayer.x - (posPlayer.x + sinf(rotPlayer.y + D3DX_PI) * 100.0f);
+		m_posDest.z = posPlayer.z - (posPlayer.z + cosf(rotPlayer.y + D3DX_PI) * 100.0f);
+
+		m_rotDest.y = atan2f(m_posDest.x, m_posDest.z);
+
+		// 投げられる状態にする
+		m_throwState = THROWSTATE_THROW;
 
 		break;
 
-	case STATE_FOLLOW:		// 追尾状態
+	case CLucmin::THROWSTATE_THROW:		// 投げられる状態
+
+		if (m_posDest.x < 0.0f)
+		{
+			fMoveSpeedX *= -1.0f;
+		}
+
+		if (m_posDest.z < 0.0f)
+		{
+			fMoveSpeedZ *= -1.0f;
+		}
+
+
+		// 移動量加算
+		m_move.x = sinf(m_rotDest.y + D3DX_PI) * (MOVE + (m_posDest.x * fMoveSpeedX));
+		m_move.z = cosf(m_rotDest.y + D3DX_PI) * (MOVE + (m_posDest.z * fMoveSpeedZ));
+
+		// 重力
+		m_move.y += GRAVITY;
 
 		break;
 
@@ -342,6 +427,8 @@ void CLucmin::UpdateState(void)
 
 		break;
 	}
+
+
 }
 
 //==============================================================
@@ -431,28 +518,25 @@ void CLucmin::RotNormalize(void)
 //==============================================================
 void CLucmin::Screen(void)
 {
-	//if (m_pos.y < 0.0f)
-	//{//画面下に出たら
+	if (m_pos.y <= 0.0f)
+	{
+		m_pos.y = 0.0f;
+		m_move.y = 0.0f;
 
-	//	m_move.y = 0.0f;
-	//	m_pos.y = 0.0f;
+		if (m_throwState == THROWSTATE_THROW)
+		{ // 投げられ状態の時
 
-	//	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+			// 通常状態に戻す
+			m_throwState = THROWSTATE_NONE;
 
-	//	if (pInputKeyboard->GetPress(DIK_SPACE) == false)
-	//	{
-	//		m_bLand = true;		//着地した
-	//		m_bJump = false;	//ジャンプしてない
-	//	}
-
-	//	m_nDashCounter = 0;		//ダッシュ数リセット
-
-	//	//m_state = STATE_NONE;		//通常状態にする
-	//}
+			// 呼び戻し状態にする
+			m_state = STATE_CALL;
+		}
+	}
 }
 
 //==============================================================
-//敵の描画処理
+//ルクミンの描画処理
 //==============================================================
 void CLucmin::Draw(void)
 {
@@ -475,7 +559,7 @@ void CLucmin::Draw(void)
 
 	for (int nCntEnemy = 0; nCntEnemy < PARTS_MAX; nCntEnemy++)
 	{
-		//敵の描画
+		//ルクミンの描画
 		m_apModel[nCntEnemy]->Draw();
 	}
 }
@@ -495,14 +579,38 @@ void CLucmin::FollowMove(void)
 	m_posDest.x = m_pos.x - posPlayer.x;
 	m_posDest.z = m_pos.z - posPlayer.z;
 
+	// 目的の向き
 	m_fRotDest = atan2f(m_posDest.x, m_posDest.z);
 
 	if (((m_pos.x - posPlayer.x) > MOVE_DISTANCE || (m_pos.x - posPlayer.x) < -MOVE_DISTANCE) ||
 		((m_pos.z - posPlayer.z) > MOVE_DISTANCE || (m_pos.z - posPlayer.z) < -MOVE_DISTANCE))
-	{
-		// 移動量加算
-		m_move.x = sinf(m_fRotDest + D3DX_PI) * MOVE;
-		m_move.z = cosf(m_fRotDest + D3DX_PI) * MOVE;
+	{ // 一定距離から離れたら
+
+		if (m_state == STATE_CALL)
+		{ // 呼び戻し状態の時
+
+			// 移動量加算
+			m_move.x = sinf(m_fRotDest + D3DX_PI) * MOVE * 1.5f;
+			m_move.z = cosf(m_fRotDest + D3DX_PI) * MOVE * 1.5f;
+		}
+		else
+		{
+			// 移動量加算
+			m_move.x = sinf(m_fRotDest + D3DX_PI) * MOVE;
+			m_move.z = cosf(m_fRotDest + D3DX_PI) * MOVE;
+		}
+		
+	}
+	else
+	{ // 一定距離以内だったら
+
+		if (m_state == STATE_CALL)
+		{ // 呼び戻し状態の時
+
+			m_state = STATE_FOLLOW;		// 追尾状態にする
+		}
+
+		
 	}
 }
 
