@@ -608,9 +608,11 @@ void CPlayer::ControlKeyboardCommand(void)
 				{ // ƒ‹ƒNƒ~ƒ“‚ª“Š‚°‚ç‚êó‘Ô && ŒÄ‚Ñ‚©‚¯ó‘Ô‚¶‚á‚È‚¢‚Æ‚«
 
 					pLucmin->SetState(CLucmin::STATE_THROW);		// “Š‚°‚ç‚êó‘Ô‚É‚·‚é
+
+					break;
+
 				}
 
-				break;
 			}
 		}
 	}

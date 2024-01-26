@@ -84,7 +84,10 @@ HRESULT CGame::Init(void)
 	m_pPlayer = m_pPlayer->Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	// ルクミンの生成
-	m_pLucmin[0] = CLucmin::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	for (int nCnt = 0; nCnt < 2; nCnt++)
+	{
+		m_pLucmin[nCnt] = CLucmin::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	}
 
 	//エディットの生成
 	//m_pEdit = CEdit::Create();

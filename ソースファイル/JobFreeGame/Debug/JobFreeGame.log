@@ -1,4 +1,4 @@
-﻿  debugproc.cpp
+﻿  player.cpp
 C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(85,70): warning C4100: 'fHeight': 引数は関数の本体部で 1 度も参照されません。
 C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(85,56): warning C4100: 'fWidth': 引数は関数の本体部で 1 度も参照されません。
 C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(85,45): warning C4100: 'pos': 引数は関数の本体部で 1 度も参照されません。
@@ -9,4 +9,6 @@ C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeG
 C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(86,27): warning C4100: 'type': 引数は関数の本体部で 1 度も参照されません。
 C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(87,34): warning C4100: 'rot': 引数は関数の本体部で 1 度も参照されません。
 C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(88,35): warning C4100: 'size': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\motion.h(88,42): warning C4100: 'nNumModel': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\player.cpp(590,8): warning C4189: 'fRotDest': ローカル変数が初期化されましたが、参照されていません
   JobFreeGame.vcxproj -> C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\Debug\JobFreeGame.exe
