@@ -36,6 +36,7 @@ public:
 		TYPE_PAUSE,			// ポーズ
 		TYPE_SCENE,			// シーン
 		TYPE_FADE,			// フェード
+		TYPE_POINT,			// ポイント
 
 		TYPE_MAX			// 種類の最大数
 	};

@@ -24,6 +24,7 @@
 //#include "UI_item.h"
 //#include "wall.h"
 //#include "tutorial_texture.h"
+#include "point.h"
 
 //**************************************************************
 //静的メンバ変数宣言
@@ -39,6 +40,7 @@ bool CGame::m_bEnemySpawnFirst = false;			//スタートしたか
 bool CGame::m_bEnemySpawnSecond = false;		//敵が出現したか
 CDeathUI *CGame::m_pDeathUI = nullptr;			//死亡UIの情報
 CItemUI *CGame::m_pItemUI = nullptr;			//アイテムUIの情報
+CPoint* CGame::m_pPoint = nullptr;				//ポイントの情報
 CGame::GAMEMODE CGame::m_gameMode = GAMEMODE_START;	//ゲームモード
 
 //==============================================================
@@ -84,10 +86,13 @@ HRESULT CGame::Init(void)
 	m_pPlayer = m_pPlayer->Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	// ルクミンの生成
-	for (int nCnt = 0; nCnt < 2; nCnt++)
+	for (int nCnt = 0; nCnt < 1; nCnt++)
 	{
 		m_pLucmin[nCnt] = CLucmin::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
+
+	// ポイントの生成
+	m_pPoint = CPoint::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//エディットの生成
 	//m_pEdit = CEdit::Create();

@@ -41,22 +41,22 @@
 int CLucmin::m_nNumAll = 0;						//ÉãÉNÉ~ÉìÇÃëçêî
 char *CLucmin::m_apFileName[PARTS_MAX] =
 {
-	"data\\MODEL\\player\\00_body.x",
-	"data\\MODEL\\player\\01_head.x",
-	"data\\MODEL\\player\\02_hair.x",
-	"data\\MODEL\\player\\03_LU_arm.x",
-	"data\\MODEL\\player\\04_LD_arm.x",
-	"data\\MODEL\\player\\05_L_hand.x",
-	"data\\MODEL\\player\\06_RU_arm.x",
-	"data\\MODEL\\player\\07_RD_arm.x",
-	"data\\MODEL\\player\\08_R_arm.x",
-	"data\\MODEL\\player\\09_waist.x",
-	"data\\MODEL\\player\\10_LU_leg.x",
-	"data\\MODEL\\player\\11_LD_leg.x",
-	"data\\MODEL\\player\\12_L_shoe.x",
-	"data\\MODEL\\player\\13_RU_leg.x",
-	"data\\MODEL\\player\\14_RD_leg.x",
-	"data\\MODEL\\player\\15_R_shoe.x",
+	"data\\MODEL\\enemy\\00_body.x",
+	"data\\MODEL\\enemy\\01_head.x",
+	"data\\MODEL\\enemy\\02_hair.x",
+	"data\\MODEL\\enemy\\03_LU_arm.x",
+	"data\\MODEL\\enemy\\04_LD_arm.x",
+	"data\\MODEL\\enemy\\05_L_hand.x",
+	"data\\MODEL\\enemy\\06_RU_arm.x",
+	"data\\MODEL\\enemy\\07_RD_arm.x",
+	"data\\MODEL\\enemy\\08_R_arm.x",
+	"data\\MODEL\\enemy\\09_waist.x",
+	"data\\MODEL\\enemy\\10_LU_leg.x",
+	"data\\MODEL\\enemy\\11_LD_leg.x",
+	"data\\MODEL\\enemy\\12_L_shoe.x",
+	"data\\MODEL\\enemy\\13_RU_leg.x",
+	"data\\MODEL\\enemy\\14_RD_leg.x",
+	"data\\MODEL\\enemy\\15_R_shoe.x",
 
 };
 
@@ -526,11 +526,14 @@ void CLucmin::Screen(void)
 		if (m_throwState == THROWSTATE_THROW)
 		{ // ìäÇ∞ÇÁÇÍèÛë‘ÇÃéû
 
+			m_move.x = 0.0f;
+			m_move.z = 0.0f;
+
 			// í èÌèÛë‘Ç…ñﬂÇ∑
 			m_throwState = THROWSTATE_NONE;
 
-			// åƒÇ—ñﬂÇµèÛë‘Ç…Ç∑ÇÈ
-			m_state = STATE_CALL;
+			// íTÇ∑èÛë‘Ç…Ç∑ÇÈ
+			m_state = STATE_SEARCH;
 		}
 	}
 }

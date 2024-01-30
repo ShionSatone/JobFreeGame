@@ -25,6 +25,7 @@ class CItemUI;			//アイテムUIの情報
 class CEdit;			//エディットの情報
 class CPause;			//ポーズ画面の情報
 class CFade;			//フェード
+class CPoint;			//ポイント
 
 //**************************************************************
 //ゲーム画面クラスの定義
@@ -61,6 +62,7 @@ public:
 	static CLucmin* GetLucmin(int nIdx) { return m_pLucmin[nIdx]; }		//ルクミンのs情報取得
 	static CPause *GetPause(void) { return m_pPause; }			//ポーズ画面の情報
 	static bool GetPauseDisp(void) { return m_bPause; }			//ポーズしてるか取得
+	static CPoint* GetPoint(void) { return m_pPoint; }			//ポイントの情報
 
 private:
 
@@ -71,6 +73,7 @@ private:
 	static CScore *m_pScore;		//スコアの情報
 	static CDeathUI *m_pDeathUI;	//死亡UIの情報
 	static CItemUI *m_pItemUI;		//アイテムUIの情報
+	static CPoint* m_pPoint;		//ポイントの情報
 
 	static bool m_bReset;			//リセットしたか
 	static bool m_bPause;			//ポーズ画面か

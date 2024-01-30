@@ -31,6 +31,9 @@
     <Filter Include="Lucmin">
       <UniqueIdentifier>{8324339d-13b3-40b6-99cc-88d0908b65b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3DUI">
+      <UniqueIdentifier>{79b77323-ca2a-41fb-b1e9-943b4378e581}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -105,6 +108,12 @@
     <ClCompile Include="lucmin.cpp">
       <Filter>Lucmin</Filter>
     </ClCompile>
+    <ClCompile Include="point.cpp">
+      <Filter>3DUI</Filter>
+    </ClCompile>
+    <ClCompile Include="whistle.cpp">
+      <Filter>3DUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -178,6 +187,12 @@
     </ClInclude>
     <ClInclude Include="lucmin.h">
       <Filter>Lucmin</Filter>
+    </ClInclude>
+    <ClInclude Include="point.h">
+      <Filter>3DUI</Filter>
+    </ClInclude>
+    <ClInclude Include="whistle.h">
+      <Filter>3DUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

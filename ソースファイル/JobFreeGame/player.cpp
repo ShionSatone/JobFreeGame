@@ -27,7 +27,7 @@
 #define CURVE_UP			(0.0f)		//上の角度
 #define CURVE_DOWN			(1.0f)		//下の角度
 #define MAX_STR				(128)		//文字の最大数
-#define FRONT_MOVE			(0.6f)		//手前の時の移動量
+#define MOVE				(0.6f)		//手前の時の移動量
 #define STOP_MOVE			(0.8f)		//止まる判定の移動量
 #define FILE_HUMAN			"data\\TXT\\motion_player.txt"		//プレイヤーモデルのテキスト
 
@@ -508,22 +508,22 @@ void CPlayer::ControlKeyboardMove(void)
 	{//右
 		if (pInputKeyboard->GetPress(DIK_W) == true)
 		{//奥
-			m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * -0.25f) * FRONT_MOVE;
-			m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * -0.25f) * FRONT_MOVE;
+			m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * -0.25f) * MOVE;
+			m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * -0.25f) * MOVE;
 			m_fRotDest = pCamera->GetRotation().y + D3DX_PI * -0.75f;
 
 		}
 		else if (pInputKeyboard->GetPress(DIK_S) == true)
 		{//手前
-			m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * -0.75f) * FRONT_MOVE;
-			m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * -0.75f) * FRONT_MOVE;
+			m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * -0.75f) * MOVE;
+			m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * -0.75f) * MOVE;
 			m_fRotDest = pCamera->GetRotation().y + D3DX_PI * -0.25f;
 
 		}
 		else
 		{
-			m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_MOVE;
-			m_move.z += cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_MOVE;
+			m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * MOVE;
+			m_move.z += cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * MOVE;
 			m_fRotDest = pCamera->GetRotation().y + D3DX_PI * -CURVE_RL;
 		}
 
@@ -534,22 +534,22 @@ void CPlayer::ControlKeyboardMove(void)
 
 		if (pInputKeyboard->GetPress(DIK_W) == true)
 		{//奥
-			m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * 0.25f) * FRONT_MOVE;
-			m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * 0.25f) * FRONT_MOVE;
+			m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * 0.25f) * MOVE;
+			m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * 0.25f) * MOVE;
 			m_fRotDest = pCamera->GetRotation().y + D3DX_PI * 0.75f;
 
 		}
 		else if (pInputKeyboard->GetPress(DIK_S) == true)
 		{//手前
-			m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * 0.75f) * FRONT_MOVE;
-			m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * 0.75f) * FRONT_MOVE;
+			m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * 0.75f) * MOVE;
+			m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * 0.75f) * MOVE;
 			m_fRotDest = pCamera->GetRotation().y + D3DX_PI * 0.25f;
 
 		}
 		else
 		{
-			m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_MOVE;
-			m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_MOVE;
+			m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * MOVE;
+			m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * MOVE;
 			m_fRotDest = pCamera->GetRotation().y + D3DX_PI * CURVE_RL;
 		}
 
@@ -557,16 +557,16 @@ void CPlayer::ControlKeyboardMove(void)
 	}
 	else if (pInputKeyboard->GetPress(DIK_W) == true)
 	{//奥
-		m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_UP) * FRONT_MOVE;
-		m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_UP) * FRONT_MOVE;
+		m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_UP) * MOVE;
+		m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_UP) * MOVE;
 		m_fRotDest = pCamera->GetRotation().y + D3DX_PI * CURVE_DOWN;
 
 		//m_bMove = true;		//歩かせる
 	}
 	else if (pInputKeyboard->GetPress(DIK_S) == true)
 	{//手前
-		m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_DOWN) * FRONT_MOVE;
-		m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_DOWN) * FRONT_MOVE;
+		m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_DOWN) * MOVE;
+		m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_DOWN) * MOVE;
 		m_fRotDest = pCamera->GetRotation().y;
 
 		//m_bMove = true;		//歩かせる
@@ -604,8 +604,9 @@ void CPlayer::ControlKeyboardCommand(void)
 			{ // ルクミンが NULL じゃないとき
 
 				if (pLucmin->GetState() != CLucmin::STATE_THROW && 
-					pLucmin->GetState() != CLucmin::STATE_CALL)
-				{ // ルクミンが投げられ状態 && 呼びかけ状態じゃないとき
+					pLucmin->GetState() != CLucmin::STATE_CALL &&
+					pLucmin->GetState() != CLucmin::STATE_SEARCH)
+				{ // ルクミンが投げられ状態 && 呼びかけ && 探し状態じゃないとき
 
 					pLucmin->SetState(CLucmin::STATE_THROW);		// 投げられ状態にする
 
@@ -640,16 +641,16 @@ void CPlayer::ControlKeyboardCommand(void)
 //	//移動
 //	if (pInputJoyPad->GetPressLX(0).x > 0.0f)
 //	{//右
-//		m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_MOVE;
-//		m_move.z += cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_MOVE;
+//		m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * MOVE;
+//		m_move.z += cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * MOVE;
 //		m_fRotDest = pCamera->GetRotation().y + D3DX_PI * -CURVE_RL;
 //
 //		m_bMove = true;		//歩かせる
 //	}
 //	else if (pInputJoyPad->GetPressLX(0).x < 0.0f)
 //	{//左
-//		m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_MOVE;
-//		m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_MOVE;
+//		m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * MOVE;
+//		m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * MOVE;
 //		m_fRotDest = pCamera->GetRotation().y + D3DX_PI * CURVE_RL;
 //
 //		m_bMove = true;		//歩かせる
