@@ -91,9 +91,11 @@ void CDebugProc::Update(void)
 
 
 	//操作方法
-	//CDebugProc::Print("\n～デバッグ用操作方法～\n");
+	/*CDebugProc::Print("\n～デバッグ用操作方法～\n");
 	
-	//CDebugProc::Print("[ENTER]：画面遷移\n");
+	CDebugProc::Print("[1]：画面遷移\n");*/
+
+	CDebugProc::Print("\n\n");
 
 	CDebugProc::Print("\n～プレイヤー操作方法～\n");
 	CDebugProc::Print("[W,A,S,D]：移動\n");

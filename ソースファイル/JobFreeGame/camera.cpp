@@ -199,7 +199,7 @@ void CCamera::Control(void)
 	//CPlayer *pPlayer = CGame::GetPlayer();			//プレイヤーの情報取得
 	CPlayer* pPlayer = CManager::GetInstance()->GetScene()->GetGame()->GetPlayer();
 
-#if 0
+#if 1
 
 	//カメラ
 	if (pInputKeyboard->GetPress(DIK_A) == true)

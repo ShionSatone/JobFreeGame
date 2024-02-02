@@ -35,7 +35,7 @@ public:
 		STATE_THROW,		// “Š‚°‚ç‚ê‚Ä‚éó‘Ô
 		STATE_SEARCH,		// ’T‚·ó‘Ô
 		STATE_ATTACK,		// UŒ‚ó‘Ô
-		STATE_CALL,			// ŒÄ‚Î‚ê‚éó‘Ô
+		STATE_WHISTLE,		// ŒÄ‚Î‚ê‚éó‘Ô
 		STATE_DAMAGE,		// ƒ_ƒ[ƒWó‘Ô
 		STATE_DEATH,		// Ž€–Só‘Ô
 		STATE_MAX

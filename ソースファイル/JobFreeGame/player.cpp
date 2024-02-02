@@ -18,6 +18,8 @@
 #include "fade.h"
 #include "model.h"
 #include "lucmin.h"
+#include "whistle.h"
+#include "point.h"
 //#include "particle.h"
 
 //マクロ定義
@@ -329,7 +331,7 @@ void CPlayer::UpdateState(void)
 
 		break;
 
-	case STATE_CALL:		// 呼びかけ状態
+	case STATE_WHISTLE:		// 呼びかけ状態
 
 		break;
 
@@ -585,9 +587,6 @@ void CPlayer::ControlKeyboardMove(void)
 void CPlayer::ControlKeyboardCommand(void)
 {
 	CInputKeyboard* pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
-	CLucmin* pLucmin = nullptr;		// ルクミンの情報
-	D3DXVECTOR3 posDest = D3DXVECTOR3(100.0f,0.0f,0.0f);
-	float fRotDest = 0.0f;
 
 	if (pInputKeyboard->GetTrigger(DIK_L) == true)
 	{ // Lキーを押したとき
@@ -595,28 +594,57 @@ void CPlayer::ControlKeyboardCommand(void)
 		// 投げる状態にする
 		m_state = STATE_THROW;
 
-		for (int nCnt = 0; nCnt < MAX_LUCMIN; nCnt++)
-		{
-			// ルクミンの情報取得
-			pLucmin = CManager::GetInstance()->GetScene()->GetGame()->GetLucmin(nCnt);
+		// 状態設定
+		SetStateThrow();
+	}
+	else if (pInputKeyboard->GetPress(DIK_RETURN) == true && m_state != STATE_WHISTLE)
+	{ // ENTERキーを押した && 集合状態じゃないとき
 
-			if (pLucmin != nullptr)
-			{ // ルクミンが NULL じゃないとき
+		// 集合状態にする
+		m_state = STATE_WHISTLE;
 
-				if (pLucmin->GetState() != CLucmin::STATE_THROW && 
-					pLucmin->GetState() != CLucmin::STATE_CALL &&
-					pLucmin->GetState() != CLucmin::STATE_SEARCH)
-				{ // ルクミンが投げられ状態 && 呼びかけ && 探し状態じゃないとき
+		// 状態設定
+		SetStateWhistle();
+	}
+}
 
-					pLucmin->SetState(CLucmin::STATE_THROW);		// 投げられ状態にする
+//==============================================================
+// 投げる状態設定
+//==============================================================
+void CPlayer::SetStateThrow(void)
+{
+	CLucmin* pLucmin = nullptr;		// ルクミンの情報
 
-					break;
+	for (int nCnt = 0; nCnt < MAX_LUCMIN; nCnt++)
+	{
+		// ルクミンの情報取得
+		pLucmin = CManager::GetInstance()->GetScene()->GetGame()->GetLucmin(nCnt);
 
-				}
+		if (pLucmin != nullptr)
+		{ // ルクミンが NULL じゃないとき
+
+			if (pLucmin->GetState() != CLucmin::STATE_THROW &&
+				pLucmin->GetState() != CLucmin::STATE_WHISTLE &&
+				pLucmin->GetState() != CLucmin::STATE_SEARCH)
+			{ // ルクミンが投げられ状態 && 呼びかけ && 探し状態じゃないとき
+
+				pLucmin->SetState(CLucmin::STATE_THROW);		// 投げられ状態にする
+
+				break;
 
 			}
 		}
 	}
+}
+
+//==============================================================
+// 集合状態設定
+//==============================================================
+void CPlayer::SetStateWhistle(void)
+{
+	//CPoint* pPoint = CManager::GetInstance()->GetScene()->GetGame()->GetPoint();		// ポイントの情報取得
+
+	//pPoint->Set
 }
 
 //==============================================================

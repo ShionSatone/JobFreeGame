@@ -152,6 +152,13 @@ void CGame::Update(void)
 	CInputJoyPad *pInputJoyPad = CManager::GetInstance()->GetInputJoyPad();			//パッドの情報取得
 	CFade *pFade = CManager::GetInstance()->GetFade();			//フェードの情報取得
 
+	if (pInputKeyboard->GetTrigger(DIK_1) == true)
+	{ // 1キーを押したとき
+
+		// リザルトに遷移
+		pFade->SetFade(CScene::MODE_RESULT);
+	}
+
 	if (pInputKeyboard->GetTrigger(DIK_P) == true || 
 		pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_START, 0) == true)
 	{//Pキーを押したら
@@ -172,6 +179,8 @@ void CGame::Update(void)
 
 		
 	}
+
+
 }
 
 //==============================================================

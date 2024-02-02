@@ -30,6 +30,7 @@ public:
 		STATE_NONE = 0,		// 通常状態
 		STATE_LOCKON,		// ロックオン状態
 		STATE_THROW,		// 投げる状態
+		STATE_WHISTLE,		// 集合状態
 		STATE_MAX
 	};
 
@@ -69,6 +70,7 @@ public:
 private:
 
 	void ControlKeyboard(void);			// キーボード操作
+	void ContlolWhistle(void);			// 呼びかけ処理
 	//void UpdateState(void);			// 状態の更新処理
 	void Screen(void);					// 画面外判定
 	void UpdateState(void);				// 状態更新処理

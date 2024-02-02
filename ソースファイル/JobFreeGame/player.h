@@ -27,7 +27,7 @@ public:
 	{
 		STATE_NONE = 0,		// 通常状態
 		STATE_THROW,		// 投げる状態
-		STATE_CALL,			// 呼びかけ状態
+		STATE_WHISTLE,		// 呼びかけ状態
 		STATE_DAMAGE,		// ダメージ状態
 		STATE_APPEAR,		// 点滅状態
 		STATE_DEATH,		// 死亡状態
@@ -103,6 +103,9 @@ private:
 	//void ControltJoyPadMove(void);		// パッドの移動操作
 
 	void ControlKeyboardCommand(void);		// 命令処理
+	void SetStateThrow(void);				// 投げる状態設定
+	void SetStateWhistle(void);				// 集合状態設定
+
 
 	void Screen(void);						// 画面外判定
 	void LoadFile(void);					// モデルファイル読み込み

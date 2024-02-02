@@ -7,11 +7,11 @@
 #include "scene.h"
 #include "manager.h"
 #include "debugproc.h"
-//#include "title.h"
+#include "title.h"
 //#include "tutorial.h"
 #include "game.h"
-//#include "result.h"
-//#include "ranking.h"
+#include "result.h"
+#include "ranking.h"
 
 //**************************************************************
 // マクロ定義
@@ -77,21 +77,21 @@ HRESULT CScene::Init(void)
 	{
 	case MODE_TITLE:		//タイトル画面
 
-		////タイトル画面の生成
-		//if (m_pTitle == NULL)
-		//{
-		//	m_pTitle = new CTitle;
+		//タイトル画面の生成
+		if (m_pTitle == NULL)
+		{
+			m_pTitle = new CTitle;
 
-		//	if (m_pTitle != NULL)
-		//	{
-		//		//ゲーム画面の初期化
-		//		if (FAILED(m_pTitle->Init()))
-		//		{//初期化処理が失敗した場合
+			if (m_pTitle != NULL)
+			{
+				//ゲーム画面の初期化
+				if (FAILED(m_pTitle->Init()))
+				{//初期化処理が失敗した場合
 
-		//			return E_FAIL;
-		//		}
-		//	}
-		//}
+					return E_FAIL;
+				}
+			}
+		}
 
 		break;
 
@@ -137,41 +137,41 @@ HRESULT CScene::Init(void)
 
 	case MODE_RESULT:		//リザルト画面
 
-		////リザルト画面の生成
-		//if (m_pResult == NULL)
-		//{
-		//	m_pResult = new CResult;
+		//リザルト画面の生成
+		if (m_pResult == NULL)
+		{
+			m_pResult = new CResult;
 
-		//	if (m_pResult != NULL)
-		//	{
-		//		//リザルト画面の初期化
-		//		if (FAILED(m_pResult->Init()))
-		//		{//初期化処理が失敗した場合
+			if (m_pResult != NULL)
+			{
+				//リザルト画面の初期化
+				if (FAILED(m_pResult->Init()))
+				{//初期化処理が失敗した場合
 
-		//			return E_FAIL;
-		//		}
-		//	}
-		//}
+					return E_FAIL;
+				}
+			}
+		}
 
 		break;
 
 	case MODE_RANKING:		//ランキング画面
 
-		////ランキング画面の生成
-		//if (m_pRanking == NULL)
-		//{
-		//	m_pRanking = new CRanking;
+		//ランキング画面の生成
+		if (m_pRanking == NULL)
+		{
+			m_pRanking = new CRanking;
 
-		//	if (m_pRanking != NULL)
-		//	{
-		//		//ランキング画面の初期化
-		//		if (FAILED(m_pRanking->Init()))
-		//		{//初期化処理が失敗した場合
+			if (m_pRanking != NULL)
+			{
+				//ランキング画面の初期化
+				if (FAILED(m_pRanking->Init()))
+				{//初期化処理が失敗した場合
 
-		//			return E_FAIL;
-		//		}
-		//	}
-		//}
+					return E_FAIL;
+				}
+			}
+		}
 
 		break;
 
@@ -196,13 +196,13 @@ void CScene::Uninit(void)
 	{
 	case MODE_TITLE:		//タイトル画面
 
-		////タイトル画面の破棄
-		//if (m_pTitle != NULL)
-		//{
-		//	//終了処理
-		//	m_pTitle->Uninit();
-		//	m_pTitle = NULL;
-		//}
+		//タイトル画面の破棄
+		if (m_pTitle != NULL)
+		{
+			//終了処理
+			m_pTitle->Uninit();
+			m_pTitle = NULL;
+		}
 
 		break;
 
@@ -232,25 +232,25 @@ void CScene::Uninit(void)
 
 	case MODE_RESULT:		//リザルト画面
 
-		////リザルト画面の破棄
-		//if (m_pResult != NULL)
-		//{
-		//	//終了処理
-		//	m_pResult->Uninit();
-		//	m_pResult = NULL;
-		//}
+		//リザルト画面の破棄
+		if (m_pResult != NULL)
+		{
+			//終了処理
+			m_pResult->Uninit();
+			m_pResult = NULL;
+		}
 
 		break;
 
 	case MODE_RANKING:		//ランキング画面
 
-		////ランキング画面の破棄
-		//if (m_pRanking != NULL)
-		//{
-		//	//終了処理
-		//	m_pRanking->Uninit();
-		//	m_pRanking = NULL;
-		//}
+		//ランキング画面の破棄
+		if (m_pRanking != NULL)
+		{
+			//終了処理
+			m_pRanking->Uninit();
+			m_pRanking = NULL;
+		}
 
 		break;
 
@@ -279,6 +279,9 @@ void CScene::Update(void)
 
 		pDebugProc->Print("<<<<<<タイトル>>>>>>\n");
 
+		pDebugProc->Print("\n～デバッグ用操作方法～\n");
+		pDebugProc->Print("[ENTER]：画面遷移\n");
+
 		break;
 
 	case MODE_TUTORIAL:		//チュートリアル画面
@@ -291,17 +294,26 @@ void CScene::Update(void)
 
 		pDebugProc->Print("<<<<<<ゲーム>>>>>>\n");
 
+		pDebugProc->Print("\n～デバッグ用操作方法～\n");
+		pDebugProc->Print("[1]：画面遷移\n");
+
 		break;
 
 	case MODE_RESULT:		//リザルト画面
 
 		pDebugProc->Print("<<<<<<リザルト>>>>>>\n");
 
+		pDebugProc->Print("\n～デバッグ用操作方法～\n");
+		pDebugProc->Print("[ENTER]：画面遷移\n");
+
 		break;
 
 	case MODE_RANKING:		//ランキング画面
 
 		pDebugProc->Print("<<<<<<ランキング>>>>>>\n");
+
+		pDebugProc->Print("\n～デバッグ用操作方法～\n");
+		pDebugProc->Print("[ENTER]：画面遷移\n");
 
 		break;
 

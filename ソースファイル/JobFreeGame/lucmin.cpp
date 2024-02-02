@@ -338,7 +338,7 @@ void CLucmin::UpdateState(void)
 	case STATE_ATTACK:		// UŒ‚ó‘Ô
 		break;
 
-	case STATE_CALL:		// ŒÄ‚Ñ–ß‚³‚ê‚éó‘Ô
+	case STATE_WHISTLE:		// ŒÄ‚Ñ–ß‚³‚ê‚éó‘Ô
 
 		// ’Ç”öˆ—
 		FollowMove();
@@ -589,7 +589,7 @@ void CLucmin::FollowMove(void)
 		((m_pos.z - posPlayer.z) > MOVE_DISTANCE || (m_pos.z - posPlayer.z) < -MOVE_DISTANCE))
 	{ // ˆê’è‹——£‚©‚ç—£‚ê‚½‚ç
 
-		if (m_state == STATE_CALL)
+		if (m_state == STATE_WHISTLE)
 		{ // ŒÄ‚Ñ–ß‚µó‘Ô‚ÌŽž
 
 			// ˆÚ“®—Ê‰ÁŽZ
@@ -607,7 +607,7 @@ void CLucmin::FollowMove(void)
 	else
 	{ // ˆê’è‹——£ˆÈ“à‚¾‚Á‚½‚ç
 
-		if (m_state == STATE_CALL)
+		if (m_state == STATE_WHISTLE)
 		{ // ŒÄ‚Ñ–ß‚µó‘Ô‚ÌŽž
 
 			m_state = STATE_FOLLOW;		// ’Ç”öó‘Ô‚É‚·‚é

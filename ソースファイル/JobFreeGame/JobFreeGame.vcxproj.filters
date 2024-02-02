@@ -34,6 +34,9 @@
     <Filter Include="3DUI">
       <UniqueIdentifier>{79b77323-ca2a-41fb-b1e9-943b4378e581}</UniqueIdentifier>
     </Filter>
+    <Filter Include="2DUI">
+      <UniqueIdentifier>{b740b214-52f9-4f4a-8e30-60153764043e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -114,6 +117,27 @@
     <ClCompile Include="whistle.cpp">
       <Filter>3DUI</Filter>
     </ClCompile>
+    <ClCompile Include="meshcylinder.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="title.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="titleTexture.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="result.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="score.cpp">
+      <Filter>2DUI</Filter>
+    </ClCompile>
+    <ClCompile Include="number.cpp">
+      <Filter>2DUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ranking.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -193,6 +217,27 @@
     </ClInclude>
     <ClInclude Include="whistle.h">
       <Filter>3DUI</Filter>
+    </ClInclude>
+    <ClInclude Include="meshcylinder.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="title.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="titleTexture.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="result.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="score.h">
+      <Filter>2DUI</Filter>
+    </ClInclude>
+    <ClInclude Include="number.h">
+      <Filter>2DUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ranking.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

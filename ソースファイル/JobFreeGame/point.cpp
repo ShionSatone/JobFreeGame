@@ -14,6 +14,7 @@
 #include "sound.h"
 #include "player.h"
 #include "texture.h"
+#include "whistle.h"
 
 //**************************************************************
 //マクロ定義
@@ -143,6 +144,9 @@ void CPoint::Update(void)
 	//当たり判定
 	//CObjectX::CollisionEnemy(&m_pos, &m_posOld, &m_move, m_min, m_max);
 
+	// 笛の処理
+	ContlolWhistle();
+
 	// 状態更新
 	UpdateState();
 
@@ -178,6 +182,14 @@ void CPoint::UpdateState(void)
 		ControlKeyboard();
 
 		break;
+
+	case CPoint::STATE_WHISTLE:		// 呼び状態
+
+		// 追尾処理
+		Follow();
+
+		break;
+
 	default:
 		
 		// 停止する
@@ -192,7 +204,7 @@ void CPoint::UpdateState(void)
 //==============================================================
 void CPoint::Follow(void)
 {
-	CPlayer* pPlayer = CManager::GetInstance()->GetScene()->GetGame()->GetPlayer();		// プレイヤーの情報取得
+	CPlayer* pPlayer = CManager::GetInstance()->GetScene()->GetGame()->GetPlayer();		// ポイントの情報取得
 	D3DXVECTOR3 posPlayer = pPlayer->GetPos();
 	D3DXVECTOR3 rotPlayer = pPlayer->GetRot();
 
@@ -230,7 +242,7 @@ void CPoint::UpdateColor(void)
 }
 
 //==============================================================
-//プレイヤーのキーボード操作処理
+// ポイントのキーボード操作処理
 //==============================================================
 void CPoint::ControlKeyboard(void)
 {
@@ -257,8 +269,6 @@ void CPoint::ControlKeyboard(void)
 			m_pos.x += sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * MOVE;
 			m_pos.z += cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * MOVE;
 		}
-
-		//m_bMove = true;		//歩かせる
 	}
 	else if (pInputKeyboard->GetPress(DIK_J) == true)
 	{//左
@@ -280,31 +290,55 @@ void CPoint::ControlKeyboard(void)
 			m_pos.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * MOVE;
 			m_pos.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * MOVE;
 		}
-
-		//m_bMove = true;		//歩かせる
 	}
 	else if (pInputKeyboard->GetPress(DIK_I) == true)
 	{//奥
 		m_pos.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_UP) * MOVE;
 		m_pos.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_UP) * MOVE;
-
-		//m_bMove = true;		//歩かせる
 	}
 	else if (pInputKeyboard->GetPress(DIK_K) == true)
 	{//手前
 		m_pos.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_DOWN) * MOVE;
 		m_pos.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_DOWN) * MOVE;
-
-		//m_bMove = true;		//歩かせる
 	}
 
 	//位置の設定
 	CObject3D::SetPos(m_pos);
-
 }
 
 //==============================================================
-//画面外判定処理
+// 呼びかけ処理
+//==============================================================
+void CPoint::ContlolWhistle(void)
+{
+	CInputKeyboard* pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	CWhistle* pWhistle = nullptr;
+
+	if (pInputKeyboard->GetPress(DIK_RETURN) == true)
+	{ // ENTERを押したとき
+
+		if (m_state != STATE_WHISTLE)
+		{ // 集合状態じゃないとき
+
+			if (pWhistle == nullptr)
+			{
+				// 集合範囲の生成
+				pWhistle = CWhistle::Create(m_pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+				// 呼びかけ開始状態にする
+				pWhistle->SetState(CWhistle::STATE_PLANE);
+			}
+
+			// 集合状態にする
+			m_state = STATE_WHISTLE;
+
+		}
+
+	}
+}
+
+//==============================================================
+// 画面外判定処理
 //==============================================================
 void CPoint::Screen(void)
 {
@@ -312,7 +346,7 @@ void CPoint::Screen(void)
 }
 
 //==============================================================
-//ポイントの描画処理
+// ポイントの描画処理
 //==============================================================
 void CPoint::Draw(void)
 {

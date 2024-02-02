@@ -14,7 +14,7 @@ const char *CTexture::m_apFilename[MAX_TEX] =
 {
 	"data\\TEXTURE\\player000.png",		//プレイヤー
 	"data\\TEXTURE\\enemy000.png",		//敵
-	"data\\TEXTURE\\000.jpg",			//床
+	"data\\TEXTURE\\grass.jpg",			//床
 	"data\\TEXTURE\\effect000.jpg",		//エフェクト
 	"data\\TEXTURE\\score002.png",		//スコア
 };
