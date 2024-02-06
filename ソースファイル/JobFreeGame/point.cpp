@@ -32,6 +32,8 @@
 #define DAMAGE_CNT			(9)			//ダメージカウント数
 #define APP_CNT				(100)		//点滅時間
 
+#define SIZE_POINT			(D3DXVECTOR3(100.0f, 0.0f, 100.0f))		// ポイントの大きさ
+
 //**************************************************************
 //静的メンバ変数宣言
 //**************************************************************
@@ -44,6 +46,8 @@ CPoint::CPoint()
 	m_nIdxTexture = -1;
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 前回の位置
+	m_col = D3DXCOLOR(0.9f, 0.0f, 0.2f, 1.0f);		// 色
+
 
 	m_state = STATE_NONE;			// 状態
 	m_color = COLOR_NONE;			// 色
@@ -57,6 +61,8 @@ CPoint::CPoint(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_nIdxTexture = -1;
 	m_pos = pos;									// 位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 前回の位置
+	m_col = D3DXCOLOR(0.9f, 0.0f, 0.2f, 1.0f);		// 色
+
 
 	m_state = STATE_NONE;			// 状態
 	m_color = COLOR_NONE;			// 色
@@ -147,6 +153,9 @@ void CPoint::Update(void)
 	// 笛の処理
 	ContlolWhistle();
 
+	// ロックオン処理
+	LockOn();
+
 	// 状態更新
 	UpdateState();
 
@@ -157,7 +166,7 @@ void CPoint::Update(void)
 	Screen();
 
 	//デバッグ表示
-	pDebugProc->Print("\nポイントの位置 (%f, %f, %f)\n", m_pos.x, m_pos.y, m_pos.z);
+	//pDebugProc->Print("\nポイントの位置 (%f, %f, %f)\n", m_pos.x, m_pos.y, m_pos.z);
 }
 
 //==============================================================
@@ -216,6 +225,24 @@ void CPoint::Follow(void)
 }
 
 //==============================================================
+// ロックオン固定処理
+//==============================================================
+void CPoint::LockOn(void)
+{
+	CInputKeyboard* pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+
+	// ロックオンの当たり判定
+	//CollisionRockOn();
+
+
+	if (pInputKeyboard->GetPress(DIK_RSHIFT) == true)
+	{ // RSHIFTを押したとき
+
+
+	}
+}
+
+//==============================================================
 // 色更新処理
 //==============================================================
 void CPoint::UpdateColor(void)
@@ -225,7 +252,9 @@ void CPoint::UpdateColor(void)
 	case CPoint::COLOR_NONE:		// 通常色(灰色)
 		break;
 	case CPoint::COLOR_SPRING:		// 春(ピンク)
+
 		break;
+
 	case CPoint::COLOR_SUMMER:		// 夏(緑)
 		break;
 	case CPoint::COLOR_FALL:		// 秋(オレンジ)
@@ -239,6 +268,9 @@ void CPoint::UpdateColor(void)
 
 		break;
 	}
+
+	// 色設定
+	SetColor(m_col);
 }
 
 //==============================================================
@@ -312,6 +344,7 @@ void CPoint::ControlKeyboard(void)
 void CPoint::ContlolWhistle(void)
 {
 	CInputKeyboard* pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	CPlayer* pPlayer = CManager::GetInstance()->GetScene()->GetGame()->GetPlayer();
 	CWhistle* pWhistle = nullptr;
 
 	if (pInputKeyboard->GetPress(DIK_RETURN) == true)
@@ -331,7 +364,7 @@ void CPoint::ContlolWhistle(void)
 
 			// 集合状態にする
 			m_state = STATE_WHISTLE;
-
+			pPlayer->SetState(CPlayer::STATE_WHISTLE);
 		}
 
 	}
@@ -353,3 +386,281 @@ void CPoint::Draw(void)
 	// オブジェクト3Dの描画処理
 	CObject3D::Draw();
 }
+
+//==============================================================
+// 円の当たり判定
+//==============================================================
+bool CPoint::CircleCollision(D3DXVECTOR3 pos0, D3DXVECTOR3 pos1, float fRadius0, float fRadius1)
+{
+	float fLength = 0.0f;
+
+	fLength = (pos0.x - pos1.x) * (pos0.x - pos1.x) + (pos0.z - pos1.z) * (pos0.z - pos1.z);
+
+	if (fLength <= (fRadius0 * fRadius1) + (fRadius0 * fRadius1))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+//==============================================================
+// ロックオンの当たり判定
+//==============================================================
+void CPoint::CollisionRockOn(void)
+{
+	CDebugProc* pDebugProc = CManager::GetInstance()->GetDebugProc();
+
+	for (int nCntModel = 0; nCntModel < MAX_OBJECT; nCntModel++)
+	{
+		//オブジェクトを取得
+		CObject* pObj = GetObject(nCntModel);
+
+		if (pObj != NULL)
+		{//メモリが使用されているとき
+
+			//種類を取得
+			CObject::TYPE type = pObj->GetType();
+
+			if (type == TYPE_GIMMICK)
+			{//ギミックの時
+
+				//モデルの位置取得
+				D3DXVECTOR3 posModel = pObj->GetPos();
+				D3DXVECTOR3 minModel = pObj->GetSizeMin();
+				D3DXVECTOR3 maxModel = pObj->GetSizeMax();
+
+				if (m_pos.x - SIZE_POINT.x >= posModel.x + minModel.x &&
+					m_pos.x + SIZE_POINT.x <= posModel.x - minModel.x)
+				{
+					//デバッグ表示
+					pDebugProc->Print("\n当たった\n");
+				}
+
+
+				/*if (pPos->y + Max.y > posModel.y + minModel.y
+					&& pPos->y < posModel.y + maxModel.y)*/
+				//{
+				//	if (pPosOld->x - Min.z <= posModel.x + minModel.x
+				//		&& pPos->x - Min.z > posModel.x + minModel.x
+				//		&& pPos->z - Min.z > posModel.z + minModel.z
+				//		&& pPos->z + Min.z < posModel.z + maxModel.z)
+				//	{//左にめり込んだ場合
+
+				//		if (pPosOld->y + Max.y <= posModel.y + minModel.y
+				//			&& pPos->y + Max.y > posModel.y + minModel.y
+				//			&& pPos->x - Min.z > posModel.x + minModel.x
+				//			&& pPos->x + Min.z < posModel.x + maxModel.x
+				//			&& pPos->z - Min.z > posModel.z + minModel.z
+				//			&& pPos->z + Min.z < posModel.z + maxModel.z)
+				//		{//底にめり込んだ場合
+
+				//			CPlayer* pPlayer = CGame::GetPlayer();
+
+				//			//プレイヤーのヒット処理
+				//			pPlayer->Hit();
+				//		}
+				//		else if (pPosOld->y >= posModel.y + maxModel.y
+				//			&& pPos->y < posModel.y + maxModel.y
+				//			&& pPos->x - Min.z > posModel.x + minModel.x
+				//			&& pPos->x + Min.z < posModel.x + maxModel.x
+				//			&& pPos->z - Min.z > posModel.z + minModel.z
+				//			&& pPos->z + Min.z < posModel.z + maxModel.z)
+				//		{//上にめり込んだ場合
+
+				//			CPlayer* pPlayer = CGame::GetPlayer();
+
+				//			//プレイヤーのヒット処理
+				//			pPlayer->Hit();
+				//		}
+				//		else
+				//		{
+				//			//pPos->x = posModel.x + minModel.x + Min.z;		//ブロックの左に立たせる
+				//			//pMove->x = 0.0f;		//移動量を０にする
+
+				//			CPlayer* pPlayer = CGame::GetPlayer();
+
+				//			//プレイヤーのヒット処理
+				//			pPlayer->Hit();
+				//		}
+
+				//	}
+
+				//	if (pPosOld->x + Min.z >= posModel.x + maxModel.x
+				//		&& pPos->x + Min.z < posModel.x + maxModel.x
+				//		&& pPos->z - Min.z > posModel.z + minModel.z
+				//		&& pPos->z + Min.z < posModel.z + maxModel.z)
+				//	{//右にめり込んだ場合
+
+				//		if (pPosOld->y + Max.y <= posModel.y + minModel.y
+				//			&& pPos->y + Max.y > posModel.y + minModel.y
+				//			&& pPos->x - Min.z > posModel.x + minModel.x
+				//			&& pPos->x + Min.z < posModel.x + maxModel.x
+				//			&& pPos->z - Min.z > posModel.z + minModel.z
+				//			&& pPos->z + Min.z < posModel.z + maxModel.z)
+				//		{//底にめり込んだ場合
+
+				//			CPlayer* pPlayer = CGame::GetPlayer();
+
+				//			//プレイヤーのヒット処理
+				//			pPlayer->Hit();
+				//		}
+				//		else if (pPosOld->y >= posModel.y + maxModel.y
+				//			&& pPos->y < posModel.y + maxModel.y
+				//			&& pPos->x - Min.z > posModel.x + minModel.x
+				//			&& pPos->x + Min.z < posModel.x + maxModel.x
+				//			&& pPos->z - Min.z > posModel.z + minModel.z
+				//			&& pPos->z + Min.z < posModel.z + maxModel.z)
+				//		{//上にめり込んだ場合
+
+				//			CPlayer* pPlayer = CGame::GetPlayer();
+
+				//			//プレイヤーのヒット処理
+				//			pPlayer->Hit();
+				//		}
+				//		else
+				//		{
+
+				//			//pPos->x = posModel.x + maxModel.x - Min.z;		//ブロックの右に立たせる
+				//			//pMove->x = 0.0f;		//移動量を０にする
+
+				//			CPlayer* pPlayer = CGame::GetPlayer();
+
+				//			//プレイヤーのヒット処理
+				//			pPlayer->Hit();
+				//		}
+
+				//	}
+
+				//	if (pPosOld->z - Min.z <= posModel.z + minModel.z
+				//		&& pPos->z - Min.z > posModel.z + minModel.z
+				//		&& pPos->x - Min.z > posModel.x + minModel.x
+				//		&& pPos->x + Min.z < posModel.x + maxModel.x)
+				//	{//手前にめり込んだ場合
+
+				//		if (pPosOld->y + Max.y <= posModel.y + minModel.y
+				//			&& pPos->y + Max.y > posModel.y + minModel.y
+				//			&& pPos->x - Min.z > posModel.x + minModel.x
+				//			&& pPos->x + Min.z < posModel.x + maxModel.x
+				//			&& pPos->z - Min.z > posModel.z + minModel.z
+				//			&& pPos->z + Min.z < posModel.z + maxModel.z)
+				//		{//底にめり込んだ場合
+
+				//			CPlayer* pPlayer = CGame::GetPlayer();
+
+				//			//プレイヤーのヒット処理
+				//			pPlayer->Hit();
+				//		}
+				//		else if (pPosOld->y >= posModel.y + maxModel.y
+				//			&& pPos->y < posModel.y + maxModel.y
+				//			&& pPos->x - Min.z > posModel.x + minModel.x
+				//			&& pPos->x + Min.z < posModel.x + maxModel.x
+				//			&& pPos->z - Min.z > posModel.z + minModel.z
+				//			&& pPos->z + Min.z < posModel.z + maxModel.z)
+				//		{//上にめり込んだ場合
+
+				//			CPlayer* pPlayer = CGame::GetPlayer();
+
+				//			//プレイヤーのヒット処理
+				//			pPlayer->Hit();
+				//		}
+				//		else
+				//		{
+
+				//			//pPos->z = posModel.z + minModel.z + Min.z;		//ブロックの手前に立たせる
+				//			//pMove->z = 0.0f;		//移動量を０にする
+
+				//			CPlayer* pPlayer = CGame::GetPlayer();
+
+				//			//プレイヤーのヒット処理
+				//			pPlayer->Hit();
+				//		}
+
+				//	}
+
+				//	if (pPosOld->z + Min.z >= posModel.z + maxModel.z
+				//		&& pPos->z + Min.z < posModel.z + maxModel.z
+				//		&& pPos->x - Min.z > posModel.x + minModel.x
+				//		&& pPos->x + Min.z < posModel.x + maxModel.x)
+				//	{//奥にめり込んだ場合
+
+				//		if (pPosOld->y + Max.y <= posModel.y + minModel.y
+				//			&& pPos->y + Max.y > posModel.y + minModel.y
+				//			&& pPos->x - Min.z > posModel.x + minModel.x
+				//			&& pPos->x + Min.z < posModel.x + maxModel.x
+				//			&& pPos->z - Min.z > posModel.z + minModel.z
+				//			&& pPos->z + Min.z < posModel.z + maxModel.z)
+				//		{//底にめり込んだ場合
+
+				//			CPlayer* pPlayer = CGame::GetPlayer();
+
+				//			//プレイヤーのヒット処理
+				//			pPlayer->Hit();
+				//		}
+				//		else if (pPosOld->y >= posModel.y + maxModel.y
+				//			&& pPos->y < posModel.y + maxModel.y
+				//			&& pPos->x - Min.z > posModel.x + minModel.x
+				//			&& pPos->x + Min.z < posModel.x + maxModel.x
+				//			&& pPos->z - Min.z > posModel.z + minModel.z
+				//			&& pPos->z + Min.z < posModel.z + maxModel.z)
+				//		{//上にめり込んだ場合
+
+				//			CPlayer* pPlayer = CGame::GetPlayer();
+
+				//			//プレイヤーのヒット処理
+				//			pPlayer->Hit();
+				//		}
+				//		else
+				//		{
+				//			CPlayer* pPlayer = CGame::GetPlayer();
+
+				//			//プレイヤーのヒット処理
+				//			pPlayer->Hit();
+				//			//pPos->z = posModel.z + maxModel.z - Min.z;		//ブロックの奥に立たせる
+				//			//pMove->z = 0.0f;		//移動量を０にする
+				//		}
+
+				//	}
+
+				//	if (pPosOld->y + Max.y <= posModel.y + minModel.y
+				//		&& pPos->y + Max.y > posModel.y + minModel.y
+				//		&& pPos->x - Min.z > posModel.x + minModel.x
+				//		&& pPos->x + Min.z < posModel.x + maxModel.x
+				//		&& pPos->z - Min.z > posModel.z + minModel.z
+				//		&& pPos->z + Min.z < posModel.z + maxModel.z)
+				//	{//底にめり込んだ場合
+				//		CPlayer* pPlayer = CGame::GetPlayer();
+
+				//		//プレイヤーのヒット処理
+				//		pPlayer->Hit();
+				//		//pPos->y = posModel.y + minModel.y - Max.y;		//ブロックの底下に立たせる
+				//		//pMove->y = 0.0f;		//移動量を０にする
+
+				//	}
+
+				//	if (pPosOld->y >= posModel.y + maxModel.y
+				//		&& pPos->y < posModel.y + maxModel.y
+				//		&& pPos->x - Min.z > posModel.x + minModel.x
+				//		&& pPos->x + Min.z < posModel.x + maxModel.x
+				//		&& pPos->z - Min.z > posModel.z + minModel.z
+				//		&& pPos->z + Min.z < posModel.z + maxModel.z)
+				//	{//上にめり込んだ場合
+				//		CPlayer* pPlayer = CGame::GetPlayer();
+
+				//		//プレイヤーのヒット処理
+				//		pPlayer->Hit();
+				//		//pPos->y = posModel.y + maxModel.y;		//ブロックの上に立たせる
+				//		//pMove->y = 0.0f;		//移動量を０にする
+
+				//		//bLand = true;		//着地した状態にする
+
+				//	}
+				//}
+
+			}
+		}
+	}
+}
+

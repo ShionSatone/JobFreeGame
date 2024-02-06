@@ -298,6 +298,17 @@ void CPlayer::Update(void)
 	//モーション管理
 	CPlayer::MotionManager();
 
+	if (m_pos.x >= 250.0f &&
+		m_pos.x <= 350.0f &&
+		m_pos.z >= -850.0f &&
+		m_pos.z <= -750.0f)
+	{
+		CFade* pFade = CManager::GetInstance()->GetFade();
+
+		// リザルトに遷移
+		pFade->SetFade(CScene::MODE_RESULT);
+	}
+
 	//モーションの更新処理
 	m_pMotion->Update();
 
@@ -597,15 +608,15 @@ void CPlayer::ControlKeyboardCommand(void)
 		// 状態設定
 		SetStateThrow();
 	}
-	else if (pInputKeyboard->GetPress(DIK_RETURN) == true && m_state != STATE_WHISTLE)
-	{ // ENTERキーを押した && 集合状態じゃないとき
+	//else if (pInputKeyboard->GetPress(DIK_RETURN) == true && m_state != STATE_WHISTLE)
+	//{ // ENTERキーを押した && 集合状態じゃないとき
 
-		// 集合状態にする
-		m_state = STATE_WHISTLE;
+	//	// 集合状態にする
+	//	m_state = STATE_WHISTLE;
 
-		// 状態設定
-		SetStateWhistle();
-	}
+	//	// 状態設定
+	//	//SetStateWhistle();
+	//}
 }
 
 //==============================================================
@@ -623,9 +634,7 @@ void CPlayer::SetStateThrow(void)
 		if (pLucmin != nullptr)
 		{ // ルクミンが NULL じゃないとき
 
-			if (pLucmin->GetState() != CLucmin::STATE_THROW &&
-				pLucmin->GetState() != CLucmin::STATE_WHISTLE &&
-				pLucmin->GetState() != CLucmin::STATE_SEARCH)
+			if (pLucmin->GetState() == CLucmin::STATE_FOLLOW)
 			{ // ルクミンが投げられ状態 && 呼びかけ && 探し状態じゃないとき
 
 				pLucmin->SetState(CLucmin::STATE_THROW);		// 投げられ状態にする
@@ -757,7 +766,9 @@ void CPlayer::Hit(void)
 {
 	//CSound *pSound = CManager::GetInstance()->GetSound();
 	//CDeathUI *pDeathUI = CGame::GetDeathUI();
-	//CFade *pFade = CManager::GetInstance()->GetFade();
+	CFade *pFade = CManager::GetInstance()->GetFade();
+
+	pFade->SetFade(CScene::MODE_RESULT);
 
 	//if (m_state != CObject::STATE_DAMAGE && m_state != CObject::STATE_APPEAR && m_nCntDamage <= 0 && m_nCntHit <= 0 &&
 	//	pFade->GetFade() != CFade::FADE_IN)

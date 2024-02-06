@@ -31,10 +31,12 @@ public:
 	void SetType(TYPE type) { m_type = type; /*CObject::SetType(m_type);*/ }		//オブジェクトの種類の設定
 	void SetSize(D3DXVECTOR3 m_size);							//オブジェクトのサイズ設定
 	void SetPos(D3DXVECTOR3 pos) { m_pos = pos; }		//位置設定
+	void SetColor(D3DXCOLOR col);						// 色設定
 
 	TYPE GetType(void) { return m_type; }					//種類取得
 	D3DXVECTOR3 GetPos(void) { return m_pos; }				//位置取得
 	D3DXVECTOR3 GetSize(void) { return m_size; }			//サイズ取得
+	D3DXCOLOR GetColor(void) { return m_col; }			// 色取得
 
 private:
 	LPDIRECT3DTEXTURE9 m_pTexture;			//テクスチャへのポインタ

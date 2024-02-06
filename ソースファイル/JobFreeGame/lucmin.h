@@ -50,6 +50,25 @@ public:
 		THROWSTATE_MAX
 	};
 
+	// 探す状態
+	enum SEARCHSTATE
+	{
+		SEARCHSTATE_NONE = 0,			// 何もない状態
+		SEARCHSTATE_SEARCH,				// 探してる状態
+		SEARCHSTATE_FIND,				// 見つけた状態
+		SEARCHSTATE_MAX
+	};
+
+	// ルクミンの種類
+	enum TYPE
+	{
+		TYPE_SPRING = 0,		// 春
+		TYPE_SUMMER,			// 夏
+		TYPE_FALL,				// 秋
+		TYPE_WINTER,			// 冬
+		TYPE_MAX
+	};
+
 	CLucmin();		//コンストラクタ
 	CLucmin(D3DXVECTOR3 pos, D3DXVECTOR3 rot);		//コンストラクタ(オーバーロード)
 	~CLucmin();		//デストラクタ
@@ -73,6 +92,10 @@ public:
 	D3DXVECTOR3 GetSizeMin(void) { return m_min; }		// 大きさの最大値取得
 	D3DXVECTOR3 GetSizeMax(void) { return m_max; }		// 大きさの最小値取得
 	STATE GetState(void) { return m_state; }			// 状態取得
+
+	int GetNumAll(void) { return m_nNumAll; }			// ルクミンの総数
+
+	bool CircleCollision(D3DXVECTOR3 pos0, D3DXVECTOR3 pos1, float fRadius0, float fRadius1);		// 円の当たり判定
 
 private:
 
@@ -108,16 +131,22 @@ private:
 		PARTS_MAX
 	};
 
+	// 関数
 	void UpdateState(void);			// 状態の更新処理
 	void UpdateThrowState(void);	// 投げられ状態の更新処理
+	void UpdateSearchState(void);	// 探し状態の更新処理
+
+	void Search(void);				// 探す処理
+	void Attack(void);				// 攻撃処理
 
 	void MotionManager(void);		// モーション管理
-	void FollowMove(void);			// プレイヤーについていく処理
+	void FollowMove(D3DXVECTOR3 posDest);	// プレイヤーについていく処理
 
 	void Screen(void);						// 画面外判定
 	void LoadFile(void);					// モデルファイル読み込み
 	void RotNormalize(void);				// 向きの補正処理
-											   
+					
+	// 変数
 	static char *m_apFileName[PARTS_MAX];		// ファイル名
 	static int m_nNumAll;						// ルクミンの総数
 	int m_nIndex;								// ルクミンの番号
@@ -125,6 +154,7 @@ private:
 	D3DXVECTOR3 m_pos;		// 位置
 	D3DXVECTOR3 m_posOld;	// 前回の位置
 	D3DXVECTOR3 m_posDest;	// 目的の位置
+	D3DXVECTOR3 m_posDestSave;	// 目的の位置保存用
 
 	D3DXVECTOR3 m_move;		// 移動量
 	D3DXVECTOR3 m_rot;		// 向き
@@ -138,9 +168,11 @@ private:
 
 	float m_fRotDest;		// 目標
 	float m_fRotDiff;		// 差分
+	float m_fGimmickRadius;	// ギミックの半径
 
 	STATE m_state;			// ルクミンの状態
 	THROWSTATE m_throwState;		// ルクミンの投げられ状態
+	SEARCHSTATE m_searchState;		// ルクミンの探し状態
 	MOTIONSTATE m_MotionState;		// ルクミンの動きの状態
 
 	CMotion *m_pMotion;		// モーション情報

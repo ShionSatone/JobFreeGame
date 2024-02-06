@@ -67,7 +67,7 @@ private:
 
 	// 関数
 	void UpdateState(void);			// 状態の更新処理
-	void Follow(void);					// 追尾処理
+	void Follow(void);				// 追尾処理
 
 	// 変数
 	static CObject3D* m_pObject3D[TYPE_MAX];	// 3Dオブジェクト

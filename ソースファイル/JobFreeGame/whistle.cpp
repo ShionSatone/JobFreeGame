@@ -14,6 +14,7 @@
 #include "sound.h"
 #include "texture.h"
 #include "point.h"
+#include "player.h"
 
 //**************************************************************
 // マクロ定義
@@ -164,6 +165,8 @@ void CWhistle::Uninit(void)
 		// 位置設定
 		m_pObject3D[nCnt]->Uninit();
 	}
+
+	Release();
 }
 
 //==============================================================
@@ -210,6 +213,7 @@ void CWhistle::UpdateState(void)
 
 			// 範囲を円柱にする
 			m_state = STATE_CYLINDER;
+			m_nWhistleCounter = 0;
 		}
 		else
 		{
@@ -225,6 +229,23 @@ void CWhistle::UpdateState(void)
 
 		break;
 	case CWhistle::STATE_CYLINDER:	// 円柱状態
+
+		if (m_nWhistleCounter >= TIME_PLANE)
+		{ // 一定時間経ったら
+
+			CPlayer* pPlayer = CManager::GetInstance()->GetScene()->GetGame()->GetPlayer();
+			CPoint* pPoint = CManager::GetInstance()->GetScene()->GetGame()->GetPoint();
+
+			// 通常状態に戻す
+			pPlayer->SetState(CPlayer::STATE_NONE);
+			pPoint->SetState(CPoint::STATE_NONE);
+
+			// 笛の範囲消す
+			Uninit();
+		}
+
+		m_nWhistleCounter++;
+
 		break;
 	
 	default:

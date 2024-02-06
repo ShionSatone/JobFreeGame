@@ -37,6 +37,12 @@
     <Filter Include="2DUI">
       <UniqueIdentifier>{b740b214-52f9-4f4a-8e30-60153764043e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="enemy">
+      <UniqueIdentifier>{ba367276-87bd-4cc6-8e61-ad2ea2d4bf94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gimmick">
+      <UniqueIdentifier>{42bac090-913f-4d37-bbf7-deae1b45113f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -138,6 +144,18 @@
     <ClCompile Include="ranking.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="enemy.cpp">
+      <Filter>enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="gimmick.cpp">
+      <Filter>gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="lucmin_spring.cpp">
+      <Filter>Lucmin</Filter>
+    </ClCompile>
+    <ClCompile Include="goal.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -238,6 +256,18 @@
     </ClInclude>
     <ClInclude Include="ranking.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy.h">
+      <Filter>enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="gimmick.h">
+      <Filter>gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="lucmin_spring.h">
+      <Filter>Lucmin</Filter>
+    </ClInclude>
+    <ClInclude Include="goal.h">
+      <Filter>Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

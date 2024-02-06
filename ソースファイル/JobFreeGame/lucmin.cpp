@@ -17,6 +17,8 @@
 #include "sound.h"
 #include "fade.h"
 #include "player.h"
+#include "whistle.h"
+#include "point.h"
 //#include "effect.h"
 
 //マクロ定義
@@ -36,6 +38,7 @@
 #define HIT_CNT				(60 * 2)	//攻撃当たるまでのカウント数
 #define DAMAGE_CNT			(9)			//ダメージカウント数
 #define APP_CNT				(100)		//点滅時間
+#define GIMMICK_LENGTH	(1000.0f)	//ギミックとルクミンの距離
 
 //静的メンバ変数宣言
 int CLucmin::m_nNumAll = 0;						//ルクミンの総数
@@ -68,12 +71,13 @@ CLucmin::CLucmin()
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 前回の位置
 	m_posDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 目的の位置
+	m_posDestSave = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 目的の位置保存用
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 移動量
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 向き
 	m_rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 目的の向き
 	m_max = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// モデルの最大値
 	m_min = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// モデルの最小値
-
+	
 	for (int nCntEnemy = 0; nCntEnemy < PARTS_MAX; nCntEnemy++)
 	{
 		m_apModel[nCntEnemy] = NULL;		//ルクミン(パーツ)へのポインタ
@@ -84,9 +88,11 @@ CLucmin::CLucmin()
 
 	m_fRotDest = 0.0f;		//目標
 	m_fRotDiff = 0.0f;		//差分
+	m_fGimmickRadius = 0.0f;	// ギミックの半径
 
 	m_state = STATE_FOLLOW;			//状態
 	m_throwState = THROWSTATE_NONE;		// 投げられ状態
+	m_searchState = SEARCHSTATE_NONE;	// 探し状態
 	m_nCntDamage = 0;				//ダメージカウンター
 
 	m_nIndex = m_nNumAll;
@@ -103,9 +109,11 @@ CLucmin::CLucmin(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_pos = pos;									// 位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 前回の位置
 	m_posDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 目的の位置
+	m_posDestSave = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 目的の位置保存用
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 移動量
 	m_max = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// モデルの最大値
 	m_min = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// モデルの最小値
+
 	m_rot = rot;		//向き
 	m_rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 目的の向き
 
@@ -119,9 +127,11 @@ CLucmin::CLucmin(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 
 	m_fRotDest = 0.0f;	//目標
 	m_fRotDiff = 0.0f;	//差分
+	m_fGimmickRadius = 0.0f;	// ギミックの半径
 
 	m_state = STATE_FOLLOW;		//状態
 	m_throwState = THROWSTATE_NONE;		// 投げられ状態
+	m_searchState = SEARCHSTATE_NONE;	// 探し状態
 
 	m_nCntDamage = 0;			//ダメージカウンター
 
@@ -256,10 +266,10 @@ void CLucmin::Uninit(void)
 void CLucmin::Update(void)
 {
 	CDebugProc *pDebugProc = CManager::GetInstance()->GetDebugProc();
-	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
 	CCamera *pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
 	CPlayer* pPlayer = CManager::GetInstance()->GetScene()->GetGame()->GetPlayer();
 	CSound* pSound = CManager::GetInstance()->GetSound();
+	CPoint* pPoint = CManager::GetInstance()->GetScene()->GetGame()->GetPoint();
 
 	//前回の位置更新
 	m_posOld = m_pos;
@@ -276,6 +286,13 @@ void CLucmin::Update(void)
 	// 慣性付与
 	m_move.x += (0.0f - m_move.x) * 0.1f;
 	m_move.z += (0.0f - m_move.z) * 0.1f;
+
+	if (pPoint->CircleCollision(pPoint->GetPos(), m_pos, 1000.0f, 50.0f) == true &&
+		pPoint->GetState() == CPoint::STATE_WHISTLE &&
+		m_state != STATE_WHISTLE && m_state != STATE_FOLLOW && m_state != STATE_THROW)
+	{
+		m_state = STATE_WHISTLE;
+	}
 
 	//状態更新
 	UpdateState();
@@ -298,8 +315,11 @@ void CLucmin::Update(void)
 
 	//デバッグ表示
 	pDebugProc->Print("\nルクミンの位置 (%f, %f, %f)\n", m_pos.x, m_pos.y, m_pos.z);
-	pDebugProc->Print("ルクミンの移動量 (%f, %f, %f)\n", m_move.x, m_move.y, m_move.z);
-	pDebugProc->Print("ルクミンの向き   (%f, %f, %f)\n", m_rot.x, m_rot.y, m_rot.z);
+	/*pDebugProc->Print("ルクミンの移動量 (%f, %f, %f)\n", m_move.x, m_move.y, m_move.z);
+	pDebugProc->Print("ルクミンの向き   (%f, %f, %f)\n", m_rot.x, m_rot.y, m_rot.z);*/
+
+	pDebugProc->Print("目的の位置   (%f, %f, %f)\n", m_posDest.x, m_posDest.y, m_posDest.z);
+
 }
 
 //==============================================================
@@ -307,6 +327,8 @@ void CLucmin::Update(void)
 //==============================================================
 void CLucmin::UpdateState(void)
 {
+	CPlayer* pPlayer = CManager::GetInstance()->GetScene()->GetGame()->GetPlayer();		// プレイヤーの情報取得
+
 	switch (m_state)
 	{
 	case STATE_NONE:		// 何もしてない状態
@@ -314,8 +336,10 @@ void CLucmin::UpdateState(void)
 
 	case STATE_FOLLOW:		// 追尾状態
 
+		m_posDestSave = pPlayer->GetPos();		// 目的の位置
+
 		// 追尾処理
-		FollowMove();
+		FollowMove(m_posDestSave);
 
 		break;
 
@@ -333,15 +357,31 @@ void CLucmin::UpdateState(void)
 		break;
 
 	case STATE_SEARCH:		// 探す状態
+
+		if (m_searchState == SEARCHSTATE_NONE)
+		{ // 何もしてない状態の場合
+
+			m_searchState = SEARCHSTATE_SEARCH;		// 探し状態にする
+		}
+
+		// 探し状態の更新
+		UpdateSearchState();
+
 		break;
 
 	case STATE_ATTACK:		// 攻撃状態
+
+		// 攻撃処理
+		Attack();
+
 		break;
 
 	case STATE_WHISTLE:		// 呼び戻される状態
 
+		m_posDestSave = pPlayer->GetPos();		// 目的の位置
+
 		// 追尾処理
-		FollowMove();
+		FollowMove(m_posDestSave);
 
 		break;
 
@@ -429,6 +469,39 @@ void CLucmin::UpdateThrowState(void)
 	}
 
 
+}
+
+//==============================================================
+// 探し状態の更新処理
+//==============================================================
+void CLucmin::UpdateSearchState(void)
+{
+	switch (m_searchState)
+	{
+	case CLucmin::SEARCHSTATE_NONE:		// 何もしてない状態
+		break;
+
+	case CLucmin::SEARCHSTATE_SEARCH:	// 探し状態
+
+		// 探す処理
+		Search();
+
+		break;
+
+	case CLucmin::SEARCHSTATE_FIND:		// 見つけ状態
+
+		// 追尾処理
+		FollowMove(m_posDestSave);
+
+		break;
+
+	default:
+
+		// 停止する
+		assert(false);
+
+		break;
+	}
 }
 
 //==============================================================
@@ -568,25 +641,23 @@ void CLucmin::Draw(void)
 }
 
 //==============================================================
-// プレイヤーについていく処理
+// 目標の位置ついていく処理
 //==============================================================
-void CLucmin::FollowMove(void)
+void CLucmin::FollowMove(D3DXVECTOR3 posDest)
 {
-	CCamera* pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
-	CPlayer* pPlayer = CManager::GetInstance()->GetScene()->GetGame()->GetPlayer();		// プレイヤーの情報取得
-	D3DXVECTOR3 posPlayer = pPlayer->GetPos();
-	D3DXVECTOR3 rotPlayer = pPlayer->GetRot();
 	float fRotDest = 0.0f;
 
+	//m_nIndex;
+
 	// 目的の位置
-	m_posDest.x = m_pos.x - posPlayer.x;
-	m_posDest.z = m_pos.z - posPlayer.z;
+	m_posDest.x = m_pos.x - posDest.x;
+	m_posDest.z = m_pos.z - posDest.z;
 
 	// 目的の向き
 	m_fRotDest = atan2f(m_posDest.x, m_posDest.z);
 
-	if (((m_pos.x - posPlayer.x) > MOVE_DISTANCE || (m_pos.x - posPlayer.x) < -MOVE_DISTANCE) ||
-		((m_pos.z - posPlayer.z) > MOVE_DISTANCE || (m_pos.z - posPlayer.z) < -MOVE_DISTANCE))
+	if (((m_pos.x - posDest.x) > MOVE_DISTANCE || (m_pos.x - posDest.x) < -MOVE_DISTANCE) ||
+		((m_pos.z - posDest.z) > MOVE_DISTANCE || (m_pos.z - posDest.z) < -MOVE_DISTANCE))
 	{ // 一定距離から離れたら
 
 		if (m_state == STATE_WHISTLE)
@@ -604,6 +675,25 @@ void CLucmin::FollowMove(void)
 		}
 		
 	}
+	else if (m_searchState == SEARCHSTATE_FIND &&
+		(((m_pos.x - posDest.x) > m_fGimmickRadius || (m_pos.x - posDest.x) < -m_fGimmickRadius) ||
+		((m_pos.z - posDest.z) > m_fGimmickRadius || (m_pos.z - posDest.z) < -m_fGimmickRadius)))
+	{ // 見つけた状態だったら
+
+		// 移動量加算
+		m_move.x = sinf(m_fRotDest + D3DX_PI) * MOVE;
+		m_move.z = cosf(m_fRotDest + D3DX_PI) * MOVE;
+
+
+	}
+	else if (m_searchState == SEARCHSTATE_FIND)
+	{ // 探し状態だったら
+
+		// 何もしない状態にする
+		m_searchState = SEARCHSTATE_NONE;
+		m_state = STATE_NONE;
+
+	}
 	else
 	{ // 一定距離以内だったら
 
@@ -614,6 +704,79 @@ void CLucmin::FollowMove(void)
 		}
 
 		
+	}
+}
+
+//==============================================================
+// 攻撃処理
+//==============================================================
+void CLucmin::Attack(void)
+{
+
+}
+
+//==============================================================
+// 探す処理
+//==============================================================
+void CLucmin::Search(void)
+{
+	for (int nCntModel = 0; nCntModel < MAX_OBJECT; nCntModel++)
+	{
+		//オブジェクトを取得
+		CObject* pObj = GetObject(nCntModel);
+
+		if (pObj != NULL)
+		{//メモリが使用されているとき
+
+			//種類を取得
+			CObject::TYPE type = pObj->GetType();
+
+			if (type == TYPE_GIMMICK)
+			{//ギミックの時
+
+				//モデルの位置取得
+				D3DXVECTOR3 posModel = pObj->GetPos();
+				D3DXVECTOR3 minModel = pObj->GetSizeMin();
+				D3DXVECTOR3 maxModel = pObj->GetSizeMax();
+
+				//当たり判定
+				if (CircleCollision(posModel, m_pos, 100.0f, GIMMICK_LENGTH * 0.5f) == true)
+				{ // 円の当たり判定
+
+					m_posDestSave = posModel;
+					m_fGimmickRadius = 100.0f;
+
+					// 見つけた状態にする
+					m_searchState = SEARCHSTATE_FIND;
+
+					break;
+				}
+				else
+				{
+					// 何もしてない状態にする
+					m_searchState = SEARCHSTATE_NONE;
+				}
+			}
+		}
+	}
+}
+
+//==============================================================
+// 円の当たり判定
+//==============================================================
+bool CLucmin::CircleCollision(D3DXVECTOR3 pos0, D3DXVECTOR3 pos1, float fRadius0, float fRadius1)
+{
+	float fLength = 0.0f;
+
+	fLength = (pos0.x - pos1.x) * (pos0.x - pos1.x) + (pos0.z - pos1.z) * (pos0.z - pos1.z);
+
+	if (fLength <= (fRadius0 * fRadius1) + (fRadius0 * fRadius1))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 

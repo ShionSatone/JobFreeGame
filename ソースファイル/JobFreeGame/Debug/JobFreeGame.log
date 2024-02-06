@@ -1,12 +1,15 @@
-﻿  manager.cpp
-C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(86,70): warning C4100: 'fHeight': 引数は関数の本体部で 1 度も参照されません。
-C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(86,56): warning C4100: 'fWidth': 引数は関数の本体部で 1 度も参照されません。
-C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(86,45): warning C4100: 'pos': 引数は関数の本体部で 1 度も参照されません。
-C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(86,27): warning C4100: 'type': 引数は関数の本体部で 1 度も参照されません。
-C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(87,70): warning C4100: 'fHeight': 引数は関数の本体部で 1 度も参照されません。
-C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(87,56): warning C4100: 'fWidth': 引数は関数の本体部で 1 度も参照されません。
-C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(87,45): warning C4100: 'rot': 引数は関数の本体部で 1 度も参照されません。
-C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(87,27): warning C4100: 'type': 引数は関数の本体部で 1 度も参照されません。
-C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(88,34): warning C4100: 'rot': 引数は関数の本体部で 1 度も参照されません。
-C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(89,35): warning C4100: 'size': 引数は関数の本体部で 1 度も参照されません。
+﻿  player.cpp
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(88,70): warning C4100: 'fHeight': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(88,56): warning C4100: 'fWidth': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(88,45): warning C4100: 'pos': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(88,27): warning C4100: 'type': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(89,70): warning C4100: 'fHeight': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(89,56): warning C4100: 'fWidth': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(89,45): warning C4100: 'rot': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(89,27): warning C4100: 'type': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(90,34): warning C4100: 'rot': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(91,35): warning C4100: 'size': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\motion.h(88,42): warning C4100: 'nNumModel': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\player.cpp(306,18): warning C4456: 'pFade' を宣言すると、以前のローカル宣言が隠蔽されます
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\player.cpp(273,9): message : 'pFade' の宣言を確認してください
   JobFreeGame.vcxproj -> C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\Debug\JobFreeGame.exe

@@ -37,6 +37,8 @@ public:
 		TYPE_SCENE,			// シーン
 		TYPE_FADE,			// フェード
 		TYPE_POINT,			// ポイント
+		TYPE_GIMMICK,		// ギミック
+		TYPE_GOAL,			// ゴール
 
 		TYPE_MAX			// 種類の最大数
 	};

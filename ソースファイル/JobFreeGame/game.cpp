@@ -12,7 +12,7 @@
 #include "player.h"
 #include "lucmin.h"
 #include "model.h"
-//#include "enemy.h"
+#include "enemy.h"
 #include "wall.h"
 #include "field.h"
 //#include "item.h"
@@ -25,6 +25,8 @@
 //#include "wall.h"
 //#include "tutorial_texture.h"
 #include "point.h"
+#include "gimmick.h"
+#include "goal.h"
 
 //**************************************************************
 //静的メンバ変数宣言
@@ -79,20 +81,26 @@ HRESULT CGame::Init(void)
 	// 床の生成
 	CField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0);
 
-	// 地面ルクミン(仮)の生成
-	//CModel::Create(D3DXVECTOR3(100.0f, 100.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data\\MODEL\\item_star.x");
-
 	//プレイヤーの生成
 	m_pPlayer = m_pPlayer->Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	// ルクミンの生成
-	for (int nCnt = 0; nCnt < 1; nCnt++)
+	for (int nCnt = 0; nCnt < 10; nCnt++)
 	{
 		m_pLucmin[nCnt] = CLucmin::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
 
 	// ポイントの生成
 	m_pPoint = CPoint::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+	// 敵の生成
+	//CEnemy::Create(D3DXVECTOR3(100.0f, 0.0f, 100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+	// 土の壁の生成
+	CGimmick::Create(D3DXVECTOR3(-500.0f, 100.0f, -500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CGimmick::TYPE_EARTHENWALL);
+
+	// ゴールの生成
+	CGoal::Create(D3DXVECTOR3(300.0f, 0.0f, -800.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data\\MODEL\\wall_alpha.x");
 
 	//エディットの生成
 	//m_pEdit = CEdit::Create();

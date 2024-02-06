@@ -100,6 +100,7 @@ void CDebugProc::Update(void)
 	CDebugProc::Print("\n～プレイヤー操作方法～\n");
 	CDebugProc::Print("[W,A,S,D]：移動\n");
 	CDebugProc::Print("      [L]：ルクミン投げる\n");
+	CDebugProc::Print("  [ENTER]：ルクミン集合の笛\n");
 
 
 	CDebugProc::Print("\n\n");
@@ -117,7 +118,7 @@ void CDebugProc::Draw(void)
 	if (m_bDisp == true)
 	{//デバックモードがオンの時
 		//テキストの描画
-		m_pFont->DrawText(NULL, &m_aStr[0], -1, &rect, DT_LEFT, D3DCOLOR_RGBA(215, 105, 30, 255));
+		m_pFont->DrawText(NULL, &m_aStr[0], -1, &rect, DT_LEFT, D3DCOLOR_RGBA(255, 255, 255, 255));
 	}
 
 	//デバッグ表示情報のクリア

@@ -59,13 +59,15 @@ public:
 	// 設定処理
 	void SetPos(D3DXVECTOR3 pos) { m_pos = pos; }		// 位置設定
 	//void SetRot(D3DXVECTOR3 rot) { m_rot = rot; }		// 向き設定
-	//void SetState(STATE state) { m_state = state; }		// 状態設定
+	void SetState(STATE state) { m_state = state; }		// 状態設定
 
 	//取得処理
 	D3DXVECTOR3 GetPos(void) { return m_pos; }			// 位置取得
 	//D3DXVECTOR3 GetRot(void) { return m_rot; }			// 向き取得
 
-	//STATE GetState(void) { return m_state; }			// 状態取得
+	STATE GetState(void) { return m_state; }			// 状態取得
+
+	bool CircleCollision(D3DXVECTOR3 pos0, D3DXVECTOR3 pos1, float fRadius0, float fRadius1);		// 円の当たり判定
 
 private:
 
@@ -76,11 +78,15 @@ private:
 	void UpdateState(void);				// 状態更新処理
 	void UpdateColor(void);				// 色更新処理
 	void Follow(void);					// 追尾処理
+	void LockOn(void);					// ロックオン処理
+
+	void CollisionRockOn(void);			// ロックオンの当たり判定
 
 	int m_nIdxTexture;		//テクスチャの番号
 
 	D3DXVECTOR3 m_pos;		// 位置
 	D3DXVECTOR3 m_posOld;	// 前回の位置
+	D3DXCOLOR m_col;		// 色
 
 	STATE m_state;			// 状態
 	COLOR m_color;			// 色
