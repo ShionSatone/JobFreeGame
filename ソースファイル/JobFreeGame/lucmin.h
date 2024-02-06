@@ -41,6 +41,15 @@ public:
 		STATE_MAX
 	};
 
+	// 呼ばれる状態
+	enum WHISTLESTATE
+	{
+		WHISTLESTATE_NONE = 0,	// 何もない状態
+		WHISTLESTATE_REACTION,	// リアクション状態
+		WHISTLESTATE_FOLLOW,	// 追尾状態
+		WHISTLESTATE_MAX
+	};
+
 	//投げる状態
 	enum THROWSTATE
 	{
@@ -133,6 +142,7 @@ private:
 
 	// 関数
 	void UpdateState(void);			// 状態の更新処理
+	void UpdatewhistleState(void);	// 集合状態の更新処理
 	void UpdateThrowState(void);	// 投げられ状態の更新処理
 	void UpdateSearchState(void);	// 探し状態の更新処理
 
@@ -166,11 +176,15 @@ private:
 	int m_nNumModel;		// モデル(パーツ)の総数
 	int m_nCntDamage;		// ダメージカウンター
 
+	int m_nReactionCounter;	// 集合のリアクションカウンター
+	int m_nAttackCounter;	// 攻撃の間隔カウンター
+
 	float m_fRotDest;		// 目標
 	float m_fRotDiff;		// 差分
 	float m_fGimmickRadius;	// ギミックの半径
 
 	STATE m_state;			// ルクミンの状態
+	WHISTLESTATE m_whistleState;			// ルクミンの呼びかけ状態
 	THROWSTATE m_throwState;		// ルクミンの投げられ状態
 	SEARCHSTATE m_searchState;		// ルクミンの探し状態
 	MOTIONSTATE m_MotionState;		// ルクミンの動きの状態

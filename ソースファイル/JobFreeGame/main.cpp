@@ -9,7 +9,7 @@
 
 //マクロ定義
 #define CLASS_NAME			"Window Class"			//ウインドウクラスの名前
-#define WINDOW_NAME			"ピクミン(仮)"			//ウインドウの名前
+#define WINDOW_NAME			"ルクミン"			//ウインドウの名前
 
 //プロトタイプ宣言
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);

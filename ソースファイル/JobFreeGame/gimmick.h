@@ -35,7 +35,7 @@ public:
 	enum TYPE
 	{
 		TYPE_NONE = 0,				// ‰½‚à‚È‚µ
-		TYPE_EARTHENWALL,			// “y‚Ì•Ç
+		TYPE_SOILWALL,				// “y‚Ì•Ç
 		TYPE_MAX
 	};
 
@@ -49,6 +49,7 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
+	void Hit(void);		// ƒqƒbƒgˆ—
 
 	// İ’èˆ—
 	void SetPos(D3DXVECTOR3 pos) { m_pos = pos; }		// ˆÊ’uİ’è

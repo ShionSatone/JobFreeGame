@@ -561,6 +561,49 @@ bool CObjectX::CollisionEnemy(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTO
 }
 
 //==============================================================
+// ギミックとの当たり判定
+//==============================================================
+bool CObjectX::CollisionGimmick(D3DXVECTOR3* pPos, D3DXVECTOR3* pPosOld, D3DXVECTOR3* pMove, D3DXVECTOR3 Min, D3DXVECTOR3 Max)
+{
+	CDebugProc* pDebugProc = CManager::GetInstance()->GetDebugProc();
+	CCamera* pCamera = CManager::GetInstance()->GetCamera();
+
+	bool bHit = false;		// 当たったかどうか
+
+	for (int nCntModel = 0; nCntModel < MAX_OBJECT; nCntModel++)
+	{
+		//オブジェクトを取得
+		CObject* pObj = GetObject(nCntModel);
+
+		if (pObj != NULL)
+		{//メモリが使用されているとき
+
+			//種類を取得
+			CObject::TYPE type = pObj->GetType();
+
+			if (type == TYPE_GIMMICK)
+			{//ギミックの時
+
+				//モデルの位置取得
+				D3DXVECTOR3 posModel = pObj->GetPos();
+				D3DXVECTOR3 minModel = pObj->GetSizeMin();
+				D3DXVECTOR3 maxModel = pObj->GetSizeMax();
+
+				//当たり判定
+				if (CObjectX::Collision3DModel(pPos, pPosOld, pMove, Min, Max, posModel, minModel, maxModel, type, pObj) == true)
+				{ // 当たったら
+
+					bHit = true;		// 当たった状態にする
+				}
+
+			}
+		}
+	}
+
+	return bHit;
+}
+
+//==============================================================
 //敵モデルの2Dの当たり判定処理
 //==============================================================
 bool CObjectX::CollisionEnemy2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *pMove, D3DXVECTOR3 Min, D3DXVECTOR3 Max, D3DXVECTOR3 posModel, D3DXVECTOR3 minModel, D3DXVECTOR3 maxModel, TYPE type, CObject *pObj)
@@ -625,7 +668,7 @@ bool CObjectX::CollisionEnemy2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3
 //==============================================================
 bool CObjectX::Collision3DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *pMove, D3DXVECTOR3 Min, D3DXVECTOR3 Max, D3DXVECTOR3 posModel, D3DXVECTOR3 minModel, D3DXVECTOR3 maxModel, TYPE type, CObject *pObj)
 {
-	bool bLand = false;		//着地したかどうか
+	bool bHit = false;		//着地したかどうか
 	CDebugProc *pDebugProc = CManager::GetInstance()->GetDebugProc();
 
 	/*if (pPos->y + Max.y > posModel.y + minModel.y
@@ -645,10 +688,9 @@ bool CObjectX::Collision3DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 				&& pPos->z + Min.z < posModel.z + maxModel.z)
 			{//底にめり込んだ場合
 
-				CPlayer* pPlayer = CGame::GetPlayer();
-
-				//プレイヤーのヒット処理
-				pPlayer->Hit();
+				// ヒット処理
+				pObj->Hit();
+				bHit = true;
 			}
 			else if (pPosOld->y >= posModel.y + maxModel.y
 				&& pPos->y < posModel.y + maxModel.y
@@ -658,22 +700,18 @@ bool CObjectX::Collision3DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 				&& pPos->z + Min.z < posModel.z + maxModel.z)
 			{//上にめり込んだ場合
 
-				CPlayer* pPlayer = CGame::GetPlayer();
+				// ヒット処理
+				pObj->Hit();
+				bHit = true;
 
-				//プレイヤーのヒット処理
-				pPlayer->Hit();
 			}
 			else
 			{
-				//pPos->x = posModel.x + minModel.x + Min.z;		//ブロックの左に立たせる
-				//pMove->x = 0.0f;		//移動量を０にする
+				// ヒット処理
+				pObj->Hit();
+				bHit = true;
 
-				CPlayer* pPlayer = CGame::GetPlayer();
-
-				//プレイヤーのヒット処理
-				pPlayer->Hit();
 			}
-
 		}
 
 		if (pPosOld->x + Min.z >= posModel.x + maxModel.x
@@ -690,10 +728,10 @@ bool CObjectX::Collision3DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 				&& pPos->z + Min.z < posModel.z + maxModel.z)
 			{//底にめり込んだ場合
 
-				CPlayer* pPlayer = CGame::GetPlayer();
+				// ヒット処理
+				pObj->Hit();
+				bHit = true;
 
-				//プレイヤーのヒット処理
-				pPlayer->Hit();
 			}
 			else if (pPosOld->y >= posModel.y + maxModel.y
 				&& pPos->y < posModel.y + maxModel.y
@@ -703,21 +741,16 @@ bool CObjectX::Collision3DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 				&& pPos->z + Min.z < posModel.z + maxModel.z)
 			{//上にめり込んだ場合
 
-				CPlayer* pPlayer = CGame::GetPlayer();
-
-				//プレイヤーのヒット処理
-				pPlayer->Hit();
+				// ヒット処理
+				pObj->Hit();
+				bHit = true;
 			}
 			else
 			{
 
-				//pPos->x = posModel.x + maxModel.x - Min.z;		//ブロックの右に立たせる
-				//pMove->x = 0.0f;		//移動量を０にする
-
-				CPlayer* pPlayer = CGame::GetPlayer();
-
-				//プレイヤーのヒット処理
-				pPlayer->Hit();
+				// ヒット処理
+				pObj->Hit();
+				bHit = true;
 			}
 
 		}
@@ -736,10 +769,9 @@ bool CObjectX::Collision3DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 				&& pPos->z + Min.z < posModel.z + maxModel.z)
 			{//底にめり込んだ場合
 
-				CPlayer* pPlayer = CGame::GetPlayer();
-
-				//プレイヤーのヒット処理
-				pPlayer->Hit();
+				// ヒット処理
+				pObj->Hit();
+				bHit = true;
 			}
 			else if (pPosOld->y >= posModel.y + maxModel.y
 				&& pPos->y < posModel.y + maxModel.y
@@ -749,21 +781,16 @@ bool CObjectX::Collision3DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 				&& pPos->z + Min.z < posModel.z + maxModel.z)
 			{//上にめり込んだ場合
 
-				CPlayer* pPlayer = CGame::GetPlayer();
-
-				//プレイヤーのヒット処理
-				pPlayer->Hit();
+				// ヒット処理
+				pObj->Hit();
+				bHit = true;
 			}
 			else
 			{
 
-				//pPos->z = posModel.z + minModel.z + Min.z;		//ブロックの手前に立たせる
-				//pMove->z = 0.0f;		//移動量を０にする
-
-				CPlayer* pPlayer = CGame::GetPlayer();
-
-				//プレイヤーのヒット処理
-				pPlayer->Hit();
+				// ヒット処理
+				pObj->Hit();
+				bHit = true;
 			}
 
 		}
@@ -782,10 +809,9 @@ bool CObjectX::Collision3DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 				&& pPos->z + Min.z < posModel.z + maxModel.z)
 			{//底にめり込んだ場合
 
-				CPlayer* pPlayer = CGame::GetPlayer();
-
-				//プレイヤーのヒット処理
-				pPlayer->Hit();
+				// ヒット処理
+				pObj->Hit();
+				bHit = true;
 			}
 			else if (pPosOld->y >= posModel.y + maxModel.y
 				&& pPos->y < posModel.y + maxModel.y
@@ -795,19 +821,15 @@ bool CObjectX::Collision3DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 				&& pPos->z + Min.z < posModel.z + maxModel.z)
 			{//上にめり込んだ場合
 
-				CPlayer* pPlayer = CGame::GetPlayer();
-
-				//プレイヤーのヒット処理
-				pPlayer->Hit();
+				// ヒット処理
+				pObj->Hit();
+				bHit = true;
 			}
 			else
 			{
-				CPlayer* pPlayer = CGame::GetPlayer();
-
-				//プレイヤーのヒット処理
-				pPlayer->Hit();
-				//pPos->z = posModel.z + maxModel.z - Min.z;		//ブロックの奥に立たせる
-				//pMove->z = 0.0f;		//移動量を０にする
+				// ヒット処理
+				pObj->Hit();
+				bHit = true;
 			}
 
 		}
@@ -819,13 +841,10 @@ bool CObjectX::Collision3DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 			&& pPos->z - Min.z > posModel.z + minModel.z
 			&& pPos->z + Min.z < posModel.z + maxModel.z)
 		{//底にめり込んだ場合
-			CPlayer* pPlayer = CGame::GetPlayer();
+			// ヒット処理
+			pObj->Hit();
 
-			//プレイヤーのヒット処理
-			pPlayer->Hit();
-			//pPos->y = posModel.y + minModel.y - Max.y;		//ブロックの底下に立たせる
-			//pMove->y = 0.0f;		//移動量を０にする
-
+			bHit = true;
 		}
 
 		if (pPosOld->y >= posModel.y + maxModel.y
@@ -835,19 +854,14 @@ bool CObjectX::Collision3DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 			&& pPos->z - Min.z > posModel.z + minModel.z
 			&& pPos->z + Min.z < posModel.z + maxModel.z)
 		{//上にめり込んだ場合
-			CPlayer* pPlayer = CGame::GetPlayer();
-
-			//プレイヤーのヒット処理
-			pPlayer->Hit();
-			//pPos->y = posModel.y + maxModel.y;		//ブロックの上に立たせる
-			//pMove->y = 0.0f;		//移動量を０にする
-
-			//bLand = true;		//着地した状態にする
+			// ヒット処理
+			pObj->Hit();
+			bHit = true;
 
 		}
 	}
 
-	return bLand;
+	return bHit;
 }
 
 //==============================================================

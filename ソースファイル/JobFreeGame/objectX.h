@@ -48,8 +48,9 @@ public:
 	STATE GetState(void) { return m_state; }				//敵の状態取得
 
 	void SetModel(void);		//モデルの設定処理
-	static bool Collision(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *pMove, D3DXVECTOR3 Min, D3DXVECTOR3 Max);		//モデルの当たり判定
+	static bool Collision(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *pMove, D3DXVECTOR3 Min, D3DXVECTOR3 Max);			//モデルの当たり判定
 	static bool CollisionEnemy(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *pMove, D3DXVECTOR3 Min, D3DXVECTOR3 Max);		//モデルの当たり判定
+	static bool CollisionGimmick(D3DXVECTOR3* pPos, D3DXVECTOR3* pPosOld, D3DXVECTOR3* pMove, D3DXVECTOR3 Min, D3DXVECTOR3 Max);	//モデルの当たり判定
 	static int CollisionEdit(D3DXVECTOR3 pos, D3DXVECTOR3 Min, D3DXVECTOR3 Max);		//エディットのモデルとの当たり判定
 	static void CollisionRockOn(D3DXVECTOR3* pPos, D3DXVECTOR3* pPosOld, D3DXVECTOR3* pMove, D3DXVECTOR3 Min, D3DXVECTOR3 Max);	// ロックオンの当たり判定
 

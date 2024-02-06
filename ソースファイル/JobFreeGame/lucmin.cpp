@@ -38,7 +38,9 @@
 #define HIT_CNT				(60 * 2)	//攻撃当たるまでのカウント数
 #define DAMAGE_CNT			(9)			//ダメージカウント数
 #define APP_CNT				(100)		//点滅時間
-#define GIMMICK_LENGTH	(1000.0f)	//ギミックとルクミンの距離
+#define GIMMICK_LENGTH		(1000.0f)	//ギミックとルクミンの距離
+#define WHISTLE_REACTION_TIME		(30)		// 集合時のリアクション時間
+#define ATTACK_INTERVAL		(60 * 1)	// 攻撃の間隔
 
 //静的メンバ変数宣言
 int CLucmin::m_nNumAll = 0;						//ルクミンの総数
@@ -86,11 +88,15 @@ CLucmin::CLucmin()
 	m_nNumModel = 0;		//ルクミン(パーツ)の総数
 	m_pMotion = NULL;
 
+	m_nReactionCounter = 0;	// 集合のリアクションカウンター
+	m_nAttackCounter = 0;	// 攻撃の間隔カウンター
+
 	m_fRotDest = 0.0f;		//目標
 	m_fRotDiff = 0.0f;		//差分
 	m_fGimmickRadius = 0.0f;	// ギミックの半径
 
 	m_state = STATE_FOLLOW;			//状態
+	m_whistleState = WHISTLESTATE_NONE;	//呼びかけ状態
 	m_throwState = THROWSTATE_NONE;		// 投げられ状態
 	m_searchState = SEARCHSTATE_NONE;	// 探し状態
 	m_nCntDamage = 0;				//ダメージカウンター
@@ -125,11 +131,15 @@ CLucmin::CLucmin(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_pMotion = NULL;		//モーションの情報
 	m_nNumModel = 0;		//ルクミン(パーツ)の総数
 
+	m_nReactionCounter = 0;	// 集合のリアクションカウンター
+	m_nAttackCounter = 0;	// 攻撃の間隔カウンター
+
 	m_fRotDest = 0.0f;	//目標
 	m_fRotDiff = 0.0f;	//差分
 	m_fGimmickRadius = 0.0f;	// ギミックの半径
 
 	m_state = STATE_FOLLOW;		//状態
+	m_whistleState = WHISTLESTATE_NONE;	//呼びかけ状態
 	m_throwState = THROWSTATE_NONE;		// 投げられ状態
 	m_searchState = SEARCHSTATE_NONE;	// 探し状態
 
@@ -378,10 +388,14 @@ void CLucmin::UpdateState(void)
 
 	case STATE_WHISTLE:		// 呼び戻される状態
 
-		m_posDestSave = pPlayer->GetPos();		// 目的の位置
+		if (m_whistleState == WHISTLESTATE_NONE)
+		{ // 何もしてない状態だったら
 
-		// 追尾処理
-		FollowMove(m_posDestSave);
+			m_whistleState = WHISTLESTATE_REACTION;		// リアクション状態にする
+		}
+
+		// 集合状態の更新
+		UpdatewhistleState();
 
 		break;
 
@@ -389,6 +403,49 @@ void CLucmin::UpdateState(void)
 		break;
 
 	case STATE_DEATH:		// 死亡状態
+		break;
+
+	default:
+
+		// 停止する
+		assert(false);
+
+		break;
+	}
+}
+
+//==============================================================
+// 集合状態の更新処理
+//==============================================================
+void CLucmin::UpdatewhistleState(void)
+{
+	CPlayer* pPlayer = CManager::GetInstance()->GetScene()->GetGame()->GetPlayer();		// プレイヤーの情報取得
+
+	switch (m_whistleState)
+	{
+	case CLucmin::WHISTLESTATE_NONE:		// 何もしてない状態
+		break;
+
+	case CLucmin::WHISTLESTATE_REACTION:	// リアクション状態
+
+		if (m_nReactionCounter >= WHISTLE_REACTION_TIME)
+		{
+			m_whistleState = WHISTLESTATE_FOLLOW;
+
+			m_nReactionCounter = 0;	// リアクション時間初期化
+		}
+
+		m_nReactionCounter++;		// リアクション時間加算
+
+		break;
+
+	case CLucmin::WHISTLESTATE_FOLLOW:		// 追尾状態
+
+		m_posDestSave = pPlayer->GetPos();		// 目的の位置
+
+		// 追尾処理
+		FollowMove(m_posDestSave);
+
 		break;
 
 	default:
@@ -641,7 +698,7 @@ void CLucmin::Draw(void)
 }
 
 //==============================================================
-// 目標の位置ついていく処理
+// 目標の位置についていく処理
 //==============================================================
 void CLucmin::FollowMove(D3DXVECTOR3 posDest)
 {
@@ -687,11 +744,10 @@ void CLucmin::FollowMove(D3DXVECTOR3 posDest)
 
 	}
 	else if (m_searchState == SEARCHSTATE_FIND)
-	{ // 探し状態だったら
+	{ // 探し状態 && 目的のオブジェクトに到達したら
 
-		// 何もしない状態にする
-		m_searchState = SEARCHSTATE_NONE;
-		m_state = STATE_NONE;
+		m_searchState = SEARCHSTATE_NONE;		// 何もしない状態にする
+		m_state = STATE_ATTACK;					// 攻撃状態にする
 
 	}
 	else
@@ -701,6 +757,7 @@ void CLucmin::FollowMove(D3DXVECTOR3 posDest)
 		{ // 呼び戻し状態の時
 
 			m_state = STATE_FOLLOW;		// 追尾状態にする
+			m_whistleState = WHISTLESTATE_NONE;		// 何もない状態にする
 		}
 
 		
@@ -712,7 +769,19 @@ void CLucmin::FollowMove(D3DXVECTOR3 posDest)
 //==============================================================
 void CLucmin::Attack(void)
 {
+	if (m_nAttackCounter >= ATTACK_INTERVAL)
+	{ // 一定時間経ったら
 
+
+
+		m_nAttackCounter = 0;	// カウンター初期化
+	}
+	else
+	{ // 時間経ってなかったら
+
+		// カウンター加算
+		m_nAttackCounter++;
+	}
 }
 
 //==============================================================

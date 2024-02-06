@@ -85,7 +85,7 @@ HRESULT CGame::Init(void)
 	m_pPlayer = m_pPlayer->Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	// ƒ‹ƒNƒ~ƒ“‚Ì¶¬
-	for (int nCnt = 0; nCnt < 10; nCnt++)
+	for (int nCnt = 0; nCnt < 1; nCnt++)
 	{
 		m_pLucmin[nCnt] = CLucmin::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
@@ -97,7 +97,7 @@ HRESULT CGame::Init(void)
 	//CEnemy::Create(D3DXVECTOR3(100.0f, 0.0f, 100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	// “y‚Ì•Ç‚Ì¶¬
-	CGimmick::Create(D3DXVECTOR3(-500.0f, 100.0f, -500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CGimmick::TYPE_EARTHENWALL);
+	CGimmick::Create(D3DXVECTOR3(-500.0f, 100.0f, -500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CGimmick::TYPE_SOILWALL);
 
 	// ƒS[ƒ‹‚Ì¶¬
 	CGoal::Create(D3DXVECTOR3(300.0f, 0.0f, -800.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data\\MODEL\\wall_alpha.x");
