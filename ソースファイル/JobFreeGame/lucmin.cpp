@@ -101,6 +101,8 @@ CLucmin::CLucmin()
 	m_searchState = SEARCHSTATE_NONE;	// 探し状態
 	m_nCntDamage = 0;				//ダメージカウンター
 
+	m_pObject = nullptr;		// オブジェクトの情報
+
 	m_nIndex = m_nNumAll;
 
 	m_nNumAll++;
@@ -144,6 +146,8 @@ CLucmin::CLucmin(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_searchState = SEARCHSTATE_NONE;	// 探し状態
 
 	m_nCntDamage = 0;			//ダメージカウンター
+
+	m_pObject = nullptr;		// オブジェクトの情報
 
 	m_nIndex = m_nNumAll;
 
@@ -338,6 +342,7 @@ void CLucmin::Update(void)
 void CLucmin::UpdateState(void)
 {
 	CPlayer* pPlayer = CManager::GetInstance()->GetScene()->GetGame()->GetPlayer();		// プレイヤーの情報取得
+	CPoint* pPoint = CManager::GetInstance()->GetScene()->GetGame()->GetPoint();		// ポイントの情報取得
 
 	switch (m_state)
 	{
@@ -383,6 +388,21 @@ void CLucmin::UpdateState(void)
 
 		// 攻撃処理
 		Attack();
+
+		if (pPoint->GetState() == CPoint::STATE_WHISTLE)
+		{
+			m_state = STATE_FOLLOW;
+
+			// オブジェクトを NULL にする
+			m_pObject = nullptr;
+
+			if (m_searchState != SEARCHSTATE_NONE)
+			{ // 何かしてたら
+
+				// 何もしてない状態にする
+				m_searchState = SEARCHSTATE_NONE;
+			}
+		}
 
 		break;
 
@@ -765,36 +785,19 @@ void CLucmin::FollowMove(D3DXVECTOR3 posDest)
 }
 
 //==============================================================
-// 攻撃処理
-//==============================================================
-void CLucmin::Attack(void)
-{
-	if (m_nAttackCounter >= ATTACK_INTERVAL)
-	{ // 一定時間経ったら
-
-
-
-		m_nAttackCounter = 0;	// カウンター初期化
-	}
-	else
-	{ // 時間経ってなかったら
-
-		// カウンター加算
-		m_nAttackCounter++;
-	}
-}
-
-//==============================================================
 // 探す処理
 //==============================================================
 void CLucmin::Search(void)
 {
+	float fMinLength = 1000000.0f;		// 最短の長さ
+	float fLength = 0.0f;			// 対象の長さ
+
 	for (int nCntModel = 0; nCntModel < MAX_OBJECT; nCntModel++)
 	{
 		//オブジェクトを取得
 		CObject* pObj = GetObject(nCntModel);
 
-		if (pObj != NULL)
+		if (pObj != nullptr)
 		{//メモリが使用されているとき
 
 			//種類を取得
@@ -808,25 +811,70 @@ void CLucmin::Search(void)
 				D3DXVECTOR3 minModel = pObj->GetSizeMin();
 				D3DXVECTOR3 maxModel = pObj->GetSizeMax();
 
+				m_fGimmickRadius = maxModel.x * 2.0f;
+
 				//当たり判定
-				if (CircleCollision(posModel, m_pos, 100.0f, GIMMICK_LENGTH * 0.5f) == true)
+				if (CircleCollision(posModel, m_pos, m_fGimmickRadius, GIMMICK_LENGTH * 0.5f) == true)
 				{ // 円の当たり判定
 
-					m_posDestSave = posModel;
-					m_fGimmickRadius = 100.0f;
+					// ルクミンとギミックの距離を求める
+					fLength = (posModel.x - m_pos.x) * (posModel.x - m_pos.x) + (posModel.z - m_pos.z) * (posModel.z - m_pos.z);
 
-					// 見つけた状態にする
-					m_searchState = SEARCHSTATE_FIND;
+					if (fMinLength > fLength)
+					{ // 距離が最短より小さい場合
 
-					break;
-				}
-				else
-				{
-					// 何もしてない状態にする
-					m_searchState = SEARCHSTATE_NONE;
+						fMinLength = fLength;		// 最短距離更新
+
+						// オブジェクトの情報保存
+						m_pObject = pObj;
+
+						// 目的地保存
+						m_posDestSave = posModel;
+
+						// 見つけた状態にする
+						m_searchState = SEARCHSTATE_FIND;
+					}
 				}
 			}
 		}
+	}
+}
+
+//==============================================================
+// 攻撃処理
+//==============================================================
+void CLucmin::Attack(void)
+{
+	if (m_nAttackCounter >= ATTACK_INTERVAL)
+	{ // 一定時間経ったら
+
+		if (m_pObject != nullptr)
+		{ // オブジェクトが NULL じゃなかったら
+
+			// ヒット処理
+			m_pObject->Hit();
+
+			m_nAttackCounter = 0;	// カウンター初期化
+
+		}
+		else if(m_pObject == nullptr)
+		{ // オブジェクトが NULL だったら
+
+			if (m_state == STATE_ATTACK)
+			{ // 攻撃してたら
+
+				// 探している状態にする
+				m_state = STATE_SEARCH;
+			}
+
+			m_nAttackCounter = 0;	// カウンター初期化
+		}
+	}
+	else
+	{ // 時間経ってなかったら
+
+		// カウンター加算
+		m_nAttackCounter++;
 	}
 }
 

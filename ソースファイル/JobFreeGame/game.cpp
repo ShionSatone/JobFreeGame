@@ -98,6 +98,11 @@ HRESULT CGame::Init(void)
 
 	// ìyÇÃï«ÇÃê∂ê¨
 	CGimmick::Create(D3DXVECTOR3(-500.0f, 100.0f, -500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CGimmick::TYPE_SOILWALL);
+	CGimmick::Create(D3DXVECTOR3(-400.0f, 100.0f, -500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CGimmick::TYPE_SOILWALL);
+	CGimmick::Create(D3DXVECTOR3(-300.0f, 100.0f, -500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CGimmick::TYPE_SOILWALL);
+	CGimmick::Create(D3DXVECTOR3(-200.0f, 100.0f, -500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CGimmick::TYPE_SOILWALL);
+	CGimmick::Create(D3DXVECTOR3(-100.0f, 100.0f, -500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CGimmick::TYPE_SOILWALL);
+	CGimmick::Create(D3DXVECTOR3(0.0f, 100.0f, -500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CGimmick::TYPE_SOILWALL);
 
 	// ÉSÅ[ÉãÇÃê∂ê¨
 	CGoal::Create(D3DXVECTOR3(300.0f, 0.0f, -800.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data\\MODEL\\wall_alpha.x");

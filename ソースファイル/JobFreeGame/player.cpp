@@ -264,13 +264,12 @@ void CPlayer::Uninit(void)
 void CPlayer::Update(void)
 {
 	CDebugProc *pDebugProc = CManager::GetInstance()->GetDebugProc();
+	CFade* pFade = CManager::GetInstance()->GetFade();
 	//CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
 	//CCamera *pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
 
 	//前回の位置更新
 	m_posOld = m_pos;
-
-	CFade* pFade = CManager::GetInstance()->GetFade();
 
 	if (pFade->GetFade() != CFade::FADE_OUT)
 	{//自動ダッシュしてないとき
@@ -303,8 +302,6 @@ void CPlayer::Update(void)
 		m_pos.z >= -850.0f &&
 		m_pos.z <= -750.0f)
 	{
-		CFade* pFade = CManager::GetInstance()->GetFade();
-
 		// リザルトに遷移
 		pFade->SetFade(CScene::MODE_RESULT);
 	}

@@ -41,33 +41,6 @@ public:
 		STATE_MAX
 	};
 
-	// 呼ばれる状態
-	enum WHISTLESTATE
-	{
-		WHISTLESTATE_NONE = 0,	// 何もない状態
-		WHISTLESTATE_REACTION,	// リアクション状態
-		WHISTLESTATE_FOLLOW,	// 追尾状態
-		WHISTLESTATE_MAX
-	};
-
-	//投げる状態
-	enum THROWSTATE
-	{
-		THROWSTATE_NONE = 0,		// 何もない状態
-		THROWSTATE_STANDBY,			// 準備状態
-		THROWSTATE_THROW,			// 投げる状態
-		THROWSTATE_MAX
-	};
-
-	// 探す状態
-	enum SEARCHSTATE
-	{
-		SEARCHSTATE_NONE = 0,			// 何もない状態
-		SEARCHSTATE_SEARCH,				// 探してる状態
-		SEARCHSTATE_FIND,				// 見つけた状態
-		SEARCHSTATE_MAX
-	};
-
 	// ルクミンの種類
 	enum TYPE
 	{
@@ -93,6 +66,7 @@ public:
 	void SetPos(D3DXVECTOR3 pos) { m_pos = pos; }		// 位置設定
 	void SetRot(D3DXVECTOR3 rot) { m_rot = rot; }		// 向き設定
 	void SetState(STATE state) { m_state = state; }		// 状態設定
+	void SetGimmickObj(CObject* pObject) { m_pObject = pObject; }		// ギミックのオブジェクト情報設定処理
 
 	//取得処理
 	D3DXVECTOR3 GetPos(void) { return m_pos; }			// 位置取得
@@ -101,6 +75,7 @@ public:
 	D3DXVECTOR3 GetSizeMin(void) { return m_min; }		// 大きさの最大値取得
 	D3DXVECTOR3 GetSizeMax(void) { return m_max; }		// 大きさの最小値取得
 	STATE GetState(void) { return m_state; }			// 状態取得
+	CObject* GetGimmickObj(void) { return m_pObject; }	// ギミックのオブジェクトの情報取得
 
 	int GetNumAll(void) { return m_nNumAll; }			// ルクミンの総数
 
@@ -116,6 +91,33 @@ private:
 		MOTIONSTATE_JUMP,			// ジャンプ状態
 		MOTIONSTATE_LAND,			// 着地状態
 		MOTIONSTATE_MAX
+	};
+
+	// 呼ばれる状態
+	enum WHISTLESTATE
+	{
+		WHISTLESTATE_NONE = 0,	// 何もない状態
+		WHISTLESTATE_REACTION,	// リアクション状態
+		WHISTLESTATE_FOLLOW,	// 追尾状態
+		WHISTLESTATE_MAX
+	};
+
+	//投げる状態
+	enum THROWSTATE
+	{
+		THROWSTATE_NONE = 0,		// 何もない状態
+		THROWSTATE_STANDBY,			// 準備状態
+		THROWSTATE_THROW,			// 投げる状態
+		THROWSTATE_MAX
+	};
+
+	// 探す状態
+	enum SEARCHSTATE
+	{
+		SEARCHSTATE_NONE = 0,			// 何もない状態
+		SEARCHSTATE_SEARCH,				// 探してる状態
+		SEARCHSTATE_FIND,				// 見つけた状態
+		SEARCHSTATE_MAX
 	};
 
 	//ルクミンのパーツ
@@ -190,6 +192,7 @@ private:
 	MOTIONSTATE m_MotionState;		// ルクミンの動きの状態
 
 	CMotion *m_pMotion;		// モーション情報
+	CObject* m_pObject;		// オブジェクトの情報
 };
 
 #endif

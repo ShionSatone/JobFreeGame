@@ -28,6 +28,9 @@ public:
 	enum STATE
 	{
 		STATE_NONE = 0,		// 通常状態
+		STATE_DAMAGE,		// ダメージ状態
+		STATE_DEATH,		// 死亡状態
+
 		STATE_MAX
 	};
 
@@ -68,6 +71,8 @@ private:
 
 	void UpdateState(void);			// 状態の更新処理
 
+	void CheckExist(void);			// ギミックの存在確認処理
+
 	void Screen(void);				// 画面外判定
 	void LoadFile(void);			// モデルファイル読み込み
 
@@ -87,7 +92,7 @@ private:
 	D3DXMATRIX m_mtxWorld;	// ワールドマトリックス
 
 	int m_nLife;			// 寿命
-
+	int m_nDamageCounter;	// ダメージカウンター
 
 	STATE m_state;			// ギミックの状態
 	TYPE m_type;			// ギミックの種類

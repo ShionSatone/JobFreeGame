@@ -102,6 +102,9 @@ public:
 
 	void SetType(TYPE type) { m_type = type; }	//オブジェクトの種類の設定
 	TYPE GetType(void) { return m_type; }		//オブジェクトの種類の取得
+
+	bool GetIsDeath(void) { return m_bDeath; }	//死亡フラグが立っているか
+
 	static CObject *GetObject(int nIdx) /*{ return m_apObject[nIdx]; }*/;	//オブジェクトの情報取得
 
 protected:

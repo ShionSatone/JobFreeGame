@@ -1168,9 +1168,18 @@ void CObjectX::CollisionRockOn(D3DXVECTOR3* pPos, D3DXVECTOR3* pPosOld, D3DXVECT
 //==============================================================
 void CObjectX::SetColor(D3DXCOLOR col)
 {
+	CMaterial* pMaterial = CManager::GetInstance()->GetMaterial();
+	D3DXMATERIAL* pMat;
+
+	//マテリアルデータへのポインタを取得
+	pMat = (D3DXMATERIAL*)pMaterial->GetMatAddress(m_nIdxModel)->GetBufferPointer();
+
+	m_matColor = *pMat;
+
 	m_matColor.MatD3D.Diffuse = D3DXCOLOR(col.r, col.g, col.b, col.a);		//マテリアルデータへのポインタ
-	m_matColor.MatD3D.Ambient = D3DXCOLOR(col.r, col.g, col.b, col.a);		//マテリアルデータへのポインタ
-	m_matColor.MatD3D.Emissive = D3DXCOLOR(col.r, col.g, col.b, col.a);		//マテリアルデータへのポインタ
-	m_matColor.MatD3D.Power = 5.0f;
 	m_matColor.MatD3D.Specular = D3DXCOLOR(col.r, col.g, col.b, col.a);
+	m_matColor.MatD3D.Emissive = D3DXCOLOR(col.r, col.g, col.b, col.a);		//マテリアルデータへのポインタ
+	//m_matColor.MatD3D.Power = 5.0f;
+	//m_matColor.MatD3D.Ambient = D3DXCOLOR(col.r, col.g, col.b, col.a);		//マテリアルデータへのポインタ
+
 }
