@@ -85,7 +85,7 @@ HRESULT CGame::Init(void)
 	m_pPlayer = m_pPlayer->Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	// ƒ‹ƒNƒ~ƒ“‚Ì¶¬
-	for (int nCnt = 0; nCnt < 1; nCnt++)
+	for (int nCnt = 0; nCnt < 30; nCnt++)
 	{
 		m_pLucmin[nCnt] = CLucmin::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}

@@ -144,7 +144,7 @@ private:
 
 	// 関数
 	void UpdateState(void);			// 状態の更新処理
-	void UpdatewhistleState(void);	// 集合状態の更新処理
+	void UpdateWhistleState(void);	// 集合状態の更新処理
 	void UpdateThrowState(void);	// 投げられ状態の更新処理
 	void UpdateSearchState(void);	// 探し状態の更新処理
 
@@ -193,6 +193,7 @@ private:
 
 	CMotion *m_pMotion;		// モーション情報
 	CObject* m_pObject;		// オブジェクトの情報
+
 };
 
 #endif

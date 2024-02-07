@@ -16,8 +16,9 @@
 // マクロ定義
 //**************************************************************
 #define PRIORITY		(3)		// 優先順位
-#define LIFE			(5)		// ギミックの寿命
+#define LIFE			(1)		// ギミックの寿命
 #define DAMAGE_TIME		(10)	// ダメージ継続時間
+#define DEATH_TIME		(20)	// 死亡状態にするまでの時間
 
 //**************************************************************
 //静的メンバ変数宣言
@@ -39,6 +40,7 @@ CGimmick::CGimmick()
 	m_state = STATE_NONE;					// ギミックの状態
 	m_nLife = LIFE;			// 寿命
 	m_nDamageCounter = 0;	// ダメージカウンター
+	m_nDeathCounter = 0;	// 死亡状態にするまでのカウンター
 }
 
 //==============================================================
@@ -56,6 +58,7 @@ CGimmick::CGimmick(D3DXVECTOR3 pos, D3DXVECTOR3 rot, TYPE type)
 	m_state = STATE_NONE;					// ギミックの状態
 	m_nLife = LIFE;			// 寿命
 	m_nDamageCounter = 0;	// ダメージカウンター
+	m_nDeathCounter = 0;	// 死亡状態にするまでのカウンター
 
 }
 
@@ -173,10 +176,27 @@ void CGimmick::UpdateState(void)
 		}
 
 		break;
-	case CGimmick::STATE_DEATH:		// 死亡状態
 
-		// ギミックの存在確認する
-		CheckExist();
+	case STATE_DEATHSTANDBY:		// 死亡準備状態
+
+		if (m_nDeathCounter >= DEATH_TIME)
+		{ // 一定時間経ったら
+
+			m_state = STATE_DEATH;		// 死亡状態にする
+			m_nDeathCounter = 0;		// カウンター初期化
+		}
+		else
+		{
+			// ギミックの存在確認する
+			CheckExist();
+
+			m_nDeathCounter++;	// カウンター加算
+
+		}
+
+		break;
+
+	case CGimmick::STATE_DEATH:		// 死亡状態
 
 		// 終了処理
 		Uninit();
@@ -212,8 +232,8 @@ void CGimmick::Hit(void)
 	else if(m_nLife <= 0)
 	{ // 寿命がないとき
 
-		// 死亡状態にする
-		m_state = STATE_DEATH;
+		// 死亡準備状態にする
+		m_state = STATE_DEATHSTANDBY;
 	}
 }
 
@@ -232,7 +252,7 @@ void CGimmick::CheckExist(void)
 		if (pLucmin != nullptr)
 		{ // ルクミンが NULL じゃない場合
 
-			if (pLucmin->GetGimmickObj() != nullptr && pLucmin->GetState() == CLucmin::STATE_ATTACK)
+			if (pLucmin->GetGimmickObj() != nullptr && (pLucmin->GetState() == CLucmin::STATE_ATTACK /*||pLucmin->GetState() == CLucmin::STATE_SEARCH*/))
 			{ // ギミックのオブジェクトが NULL じゃない && 攻撃状態の場合
 
 				// NULL の情報を渡す

@@ -235,14 +235,16 @@ HRESULT CPlayer::Init(void)
 //==============================================================
 void CPlayer::Uninit(void)
 {
-	for (int nCntPlayer = 0; nCntPlayer < PARTS_MAX; nCntPlayer++)
+	for (int nCnt = 0; nCnt < PARTS_MAX; nCnt++)
 	{
-		if (m_apModel[nCntPlayer] != NULL)
+		if (m_apModel[nCnt] != NULL)
 		{//Žg—p‚³‚ê‚Ä‚é‚Æ‚«
 
 			//I—¹ˆ—
-			m_apModel[nCntPlayer]->Uninit();
-			m_apModel[nCntPlayer] = NULL;
+			m_apModel[nCnt]->Uninit();
+
+			delete m_apModel[nCnt];
+			m_apModel[nCnt] = NULL;
 		}
 	}
 

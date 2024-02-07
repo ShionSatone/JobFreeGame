@@ -27,6 +27,7 @@ public:
 	void Update(void);
 	void Draw(void);
 
+	// 設定
 	void SetParent(CModelHier *pModelHier) { m_pParent = pModelHier; }		//親モデルの設定
 	D3DXMATRIX GetMtxWorld(void) { return m_mtxWorld; }	//ワールドマトリックス取得
 	void SetPos(D3DXVECTOR3 pos) { m_pos = pos; }					//位置設定
@@ -37,6 +38,7 @@ public:
 	void SetDisp(void) { m_bDisp = m_bDisp ? false : true; }			//表示設定
 	void SetState(CObjectX::STATE state) { m_state = state; }			//敵の状態設定
 
+	// 取得
 	D3DXVECTOR3 GetPos(void) { return m_pos; }						//位置取得
 	D3DXVECTOR3 GetDefaultPos(void) { return m_posDefault; }		//初期位置取得
 	D3DXVECTOR3 GetRot(void) { return m_rot; }						//向き取得
@@ -46,8 +48,11 @@ public:
 	CObjectX::STATE GetState(void) { return m_state; }			//敵の状態取得
 
 private:
+
+	// 関数
 	void SetModel(void);		//モデルの設定処理
 
+	// 変数
 	LPD3DXMESH m_pMesh;					//メッシュ（頂点情報）へのポインタ
 	LPD3DXBUFFER m_pBuffMat;			//マテリアルへのポインタ
 	DWORD m_dwNumMat;					//マテリアルの数

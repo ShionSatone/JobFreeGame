@@ -167,19 +167,19 @@ CLucmin::~CLucmin()
 //==============================================================
 CLucmin *CLucmin::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
-	CLucmin *pEnemyModel = NULL;
+	CLucmin *pLucmin = NULL;
 
-	if (pEnemyModel == NULL)
+	if (pLucmin == NULL)
 	{//メモリが使用されてなかったら
 
 		//ルクミンの生成
-		pEnemyModel = new CLucmin(pos, rot);
+		pLucmin = new CLucmin(pos, rot);
 	}
 
 	//初期化処理
-	pEnemyModel->Init();
+	pLucmin->Init();
 
-	return pEnemyModel;
+	return pLucmin;
 }
 
 //==============================================================
@@ -251,23 +251,25 @@ HRESULT CLucmin::Init(void)
 //==============================================================
 void CLucmin::Uninit(void)
 {
-	for (int nCntEnemy = 0; nCntEnemy < PARTS_MAX; nCntEnemy++)
+	for (int nCnt = 0; nCnt < PARTS_MAX; nCnt++)
 	{
-		if (m_apModel[nCntEnemy] != NULL)
+		if (m_apModel[nCnt] != nullptr)
 		{//使用されてるとき
 
 			//終了処理
-			m_apModel[nCntEnemy]->Uninit();
-			m_apModel[nCntEnemy] = NULL;
+			m_apModel[nCnt]->Uninit();
+
+			delete m_apModel[nCnt];
+			m_apModel[nCnt] = nullptr;
 		}
 	}
 
-	if (m_pMotion != NULL)
+	if (m_pMotion != nullptr)
 	{//使用されてるとき
 
 		//モーションの破棄
 		delete m_pMotion;
-		m_pMotion = NULL;
+		m_pMotion = nullptr;
 	}
 
 	//オブジェクト（自分自身の破棄）
@@ -305,7 +307,21 @@ void CLucmin::Update(void)
 		pPoint->GetState() == CPoint::STATE_WHISTLE &&
 		m_state != STATE_WHISTLE && m_state != STATE_FOLLOW && m_state != STATE_THROW)
 	{
-		m_state = STATE_WHISTLE;
+		if (m_state = STATE_ATTACK)
+		{ // 攻撃してるとき
+
+			// オブジェクトを NULL にする
+			m_pObject = nullptr;
+
+			if (m_searchState != SEARCHSTATE_NONE)
+			{ // 何かしてたら
+
+				// 何もしてない状態にする
+				m_searchState = SEARCHSTATE_NONE;
+			}
+		}
+
+		m_state = STATE_WHISTLE;	// 集合してる状態にする
 	}
 
 	//状態更新
@@ -320,19 +336,12 @@ void CLucmin::Update(void)
 	//モーションの更新処理
 	m_pMotion->Update();
 
-	//状態設定
-	/*for (int nCntEnemy = 0; nCntEnemy < PARTS_MAX; nCntEnemy++)
-	{
-		m_apModel[nCntEnemy]->SetState(m_state);
-
-	}*/
-
 	//デバッグ表示
-	pDebugProc->Print("\nルクミンの位置 (%f, %f, %f)\n", m_pos.x, m_pos.y, m_pos.z);
+	//pDebugProc->Print("\nルクミンの位置 (%f, %f, %f)\n", m_pos.x, m_pos.y, m_pos.z);
 	/*pDebugProc->Print("ルクミンの移動量 (%f, %f, %f)\n", m_move.x, m_move.y, m_move.z);
 	pDebugProc->Print("ルクミンの向き   (%f, %f, %f)\n", m_rot.x, m_rot.y, m_rot.z);*/
 
-	pDebugProc->Print("目的の位置   (%f, %f, %f)\n", m_posDest.x, m_posDest.y, m_posDest.z);
+	//pDebugProc->Print("目的の位置   (%f, %f, %f)\n", m_posDest.x, m_posDest.y, m_posDest.z);
 
 }
 
@@ -389,21 +398,6 @@ void CLucmin::UpdateState(void)
 		// 攻撃処理
 		Attack();
 
-		if (pPoint->GetState() == CPoint::STATE_WHISTLE)
-		{
-			m_state = STATE_FOLLOW;
-
-			// オブジェクトを NULL にする
-			m_pObject = nullptr;
-
-			if (m_searchState != SEARCHSTATE_NONE)
-			{ // 何かしてたら
-
-				// 何もしてない状態にする
-				m_searchState = SEARCHSTATE_NONE;
-			}
-		}
-
 		break;
 
 	case STATE_WHISTLE:		// 呼び戻される状態
@@ -415,7 +409,7 @@ void CLucmin::UpdateState(void)
 		}
 
 		// 集合状態の更新
-		UpdatewhistleState();
+		UpdateWhistleState();
 
 		break;
 
@@ -437,7 +431,7 @@ void CLucmin::UpdateState(void)
 //==============================================================
 // 集合状態の更新処理
 //==============================================================
-void CLucmin::UpdatewhistleState(void)
+void CLucmin::UpdateWhistleState(void)
 {
 	CPlayer* pPlayer = CManager::GetInstance()->GetScene()->GetGame()->GetPlayer();		// プレイヤーの情報取得
 

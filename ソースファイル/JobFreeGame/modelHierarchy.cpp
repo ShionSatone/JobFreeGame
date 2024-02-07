@@ -40,17 +40,15 @@ CModelHier::CModelHier()
 	m_rotDefault = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//初期向き
 	m_vtxMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//モデルの最小値
 	m_vtxMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//モデルの最大値
-	m_pParent = NULL;		//親モデルへのポインタ
-	m_pBuffMat = NULL;
+	m_pParent = nullptr;		//親モデルへのポインタ
+	m_pBuffMat = nullptr;
 	m_dwNumMat = NULL;
-	m_pMesh = NULL;
+	m_pMesh = nullptr;
 
 	m_state = CObjectX::STATE_NONE;		//通常状態
 	m_matColor.MatD3D.Diffuse = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);		//マテリアルデータへのポインタ
 	m_matColor.MatD3D.Ambient = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);		//マテリアルデータへのポインタ
 	m_matColor.MatD3D.Emissive = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);		//マテリアルデータへのポインタ
-	m_matColor.MatD3D.Power = 5.0f;
-	m_matColor.MatD3D.Specular = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
 	m_nAppear = 0;		//点滅時間
 	m_bDisp = true;		//表示する
 
@@ -68,17 +66,15 @@ CModelHier::CModelHier(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_rotDefault = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//初期向き
 	m_vtxMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//モデルの最小値
 	m_vtxMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//モデルの最大値
-	m_pParent = NULL;	//親モデルへのポインタ
-	m_pBuffMat = NULL;
-	m_dwNumMat = NULL;
-	m_pMesh = NULL;
+	m_pParent = nullptr;	//親モデルへのポインタ
+	m_pBuffMat = nullptr;
+	m_dwNumMat = NULL;		//マテリアルの数
+	m_pMesh = nullptr;
 
 	m_state = CObjectX::STATE_NONE;		//通常状態
 	m_matColor.MatD3D.Diffuse = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);		//マテリアルデータへのポインタ
 	m_matColor.MatD3D.Ambient = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);		//マテリアルデータへのポインタ
 	m_matColor.MatD3D.Emissive = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);		//マテリアルデータへのポインタ
-	m_matColor.MatD3D.Power = 5.0f;
-	m_matColor.MatD3D.Specular = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
 	m_nAppear = 0;		//点滅時間
 	m_bDisp = true;		//表示する
 
@@ -90,7 +86,7 @@ CModelHier::CModelHier(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 //==============================================================
 CModelHier::~CModelHier()
 {
-
+	
 }
 
 //==============================================================
@@ -118,9 +114,9 @@ HRESULT CModelHier::Load(char *pFileName)
 //==============================================================
 CModelHier *CModelHier::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, char *pFileName)
 {
-	CModelHier *pModelHier = NULL;
+	CModelHier *pModelHier = nullptr;
 
-	if (pModelHier == NULL)
+	if (pModelHier == nullptr)
 	{//メモリが使用されてなかったら
 
 		//モデルの生成
@@ -160,7 +156,7 @@ HRESULT CModelHier::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, char *pFileName)
 //==============================================================
 void CModelHier::Uninit(void)
 {
-	
+	m_pParent = nullptr;
 }
 
 //==============================================================
@@ -202,7 +198,7 @@ void CModelHier::Draw(void)
 
 	D3DXMATRIX mtxParent;		//親モデルのマトリックス
 
-	if (m_pParent != NULL)
+	if (m_pParent != nullptr)
 	{//親が存在する
 
 		//親モデルのマトリックスを取得する
@@ -337,9 +333,15 @@ void CModelHier::SetModel(void)
 //==============================================================
 void CModelHier::SetColor(D3DXCOLOR col)
 {
+	CMaterial* pMaterial = CManager::GetInstance()->GetMaterial();
+	D3DXMATERIAL* pMat;
+
+	//マテリアルデータへのポインタを取得
+	pMat = (D3DXMATERIAL*)pMaterial->GetMatAddress(m_nIdxModel)->GetBufferPointer();
+
+	m_matColor = *pMat;
+
 	m_matColor.MatD3D.Diffuse = D3DXCOLOR(col.r, col.g, col.b, col.a);		//マテリアルデータへのポインタ
 	m_matColor.MatD3D.Ambient = D3DXCOLOR(col.r, col.g, col.b, col.a);		//マテリアルデータへのポインタ
 	m_matColor.MatD3D.Emissive = D3DXCOLOR(col.r, col.g, col.b, col.a);		//マテリアルデータへのポインタ
-	m_matColor.MatD3D.Power = 5.0f;
-	m_matColor.MatD3D.Specular = D3DXCOLOR(0.0f, col.g, col.b, col.a);
 }

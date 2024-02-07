@@ -29,6 +29,7 @@ public:
 	{
 		STATE_NONE = 0,		// 通常状態
 		STATE_DAMAGE,		// ダメージ状態
+		STATE_DEATHSTANDBY,	// 死亡準備状態
 		STATE_DEATH,		// 死亡状態
 
 		STATE_MAX
@@ -93,6 +94,7 @@ private:
 
 	int m_nLife;			// 寿命
 	int m_nDamageCounter;	// ダメージカウンター
+	int m_nDeathCounter;	// 死亡状態にするまでのカウンター
 
 	STATE m_state;			// ギミックの状態
 	TYPE m_type;			// ギミックの種類

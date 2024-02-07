@@ -237,23 +237,25 @@ HRESULT CEnemy::Init(void)
 //==============================================================
 void CEnemy::Uninit(void)
 {
-	for (int nCntEnemy = 0; nCntEnemy < PARTS_MAX; nCntEnemy++)
+	for (int nCnt = 0; nCnt < PARTS_MAX; nCnt++)
 	{
-		if (m_apModel[nCntEnemy] != NULL)
+		if (m_apModel[nCnt] != nullptr)
 		{//使用されてるとき
 
 			//終了処理
-			m_apModel[nCntEnemy]->Uninit();
-			m_apModel[nCntEnemy] = NULL;
+			m_apModel[nCnt]->Uninit();
+
+			delete m_apModel[nCnt];
+			m_apModel[nCnt] = nullptr;
 		}
 	}
 
-	if (m_pMotion != NULL)
+	if (m_pMotion != nullptr)
 	{//使用されてるとき
 
 		//モーションの破棄
 		delete m_pMotion;
-		m_pMotion = NULL;
+		m_pMotion = nullptr;
 	}
 
 	//オブジェクト（自分自身の破棄）
