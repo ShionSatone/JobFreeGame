@@ -16,7 +16,7 @@
 // マクロ定義
 //**************************************************************
 #define PRIORITY		(3)		// 優先順位
-#define LIFE			(5)		// ギミックの寿命
+#define LIFE			(100)		// ギミックの寿命
 #define DAMAGE_TIME		(10)	// ダメージ継続時間
 #define DEATH_TIME		(20)	// 死亡状態にするまでの時間
 
@@ -98,7 +98,7 @@ HRESULT CGimmick::Init(void)
 	CMaterial* pMaterial = CManager::GetInstance()->GetMaterial();
 
 	//モデルの読み込み
-	m_nIdxModel = pMaterial->Regist("data\\MODEL\\item_star.x");
+	m_nIdxModel = pMaterial->Regist("data\\MODEL\\gimmick\\soilwall_break.x");
 
 	//マテリアルの割り当て
 	CObjectX::BindMaterial(m_nIdxModel);

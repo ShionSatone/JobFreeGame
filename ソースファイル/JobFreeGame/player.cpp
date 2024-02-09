@@ -299,10 +299,10 @@ void CPlayer::Update(void)
 	//モーション管理
 	CPlayer::MotionManager();
 
-	if (m_pos.x >= 250.0f &&
-		m_pos.x <= 350.0f &&
-		m_pos.z >= -850.0f &&
-		m_pos.z <= -750.0f)
+	if (m_pos.x >= 350.0f &&
+		m_pos.x <= 450.0f &&
+		m_pos.z >= 1650.0f &&
+		m_pos.z <= 1750.0f)
 	{
 		// リザルトに遷移
 		pFade->SetFade(CScene::MODE_RESULT);

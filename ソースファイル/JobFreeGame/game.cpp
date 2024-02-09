@@ -83,7 +83,7 @@ HRESULT CGame::Init(void)
 	CField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0);
 
 	//プレイヤーの生成
-	m_pPlayer = m_pPlayer->Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	m_pPlayer = m_pPlayer->Create(D3DXVECTOR3(-1500.0f, 0.0f, -1000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	// ルクミンの生成
 	for (int nCnt = 0; nCnt < 10; nCnt++)
@@ -95,16 +95,45 @@ HRESULT CGame::Init(void)
 	m_pPoint = CPoint::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	// 敵の生成
-	CEnemy::Create(D3DXVECTOR3(100.0f, 0.0f, 500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	CEnemy::Create(D3DXVECTOR3(-1300.0f, 0.0f, 500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	// 土の壁の生成
-	for (int nCnt = 0; nCnt < 10; nCnt++)
+	for (int nCnt = 0; nCnt < 1; nCnt++)
 	{
-		/*m_pGimmick[nCnt] = */CGimmick::Create(D3DXVECTOR3(-500.0f + (nCnt * 100.0f), 100.0f, -500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CGimmick::TYPE_SOILWALL);
+		CGimmick::Create(D3DXVECTOR3(430.0f + (nCnt * 100.0f), 0.0f, 1100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CGimmick::TYPE_SOILWALL);
+
+		CModel::Create(D3DXVECTOR3(430.0f + (nCnt * 100.0f) + 300.0f, 0.0f, 1100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data\\MODEL\\gimmick\\soilwall_pillar.x");
+		CModel::Create(D3DXVECTOR3(430.0f + (nCnt * 100.0f) - 300.0f, 0.0f, 1100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data\\MODEL\\gimmick\\soilwall_pillar.x");
+
+	}
+
+	for (int nCnt = 0; nCnt < 7; nCnt++)
+	{
+		// 岩の生成
+		if (nCnt != 4 && nCnt != 5)
+		{
+			CModel::Create(D3DXVECTOR3(-2000.0f + (nCnt * 600.0f), 0.0f, 1000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data\\MODEL\\Rock00.x");
+
+		}
+		CModel::Create(D3DXVECTOR3(-2000.0f, 0.0f, 1000.0f + (nCnt * -600.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data\\MODEL\\Rock00.x");
+		CModel::Create(D3DXVECTOR3(-2000.0f + (nCnt * 600.0f), 0.0f, 1000.0f + (5 * -600.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data\\MODEL\\Rock00.x");
+		CModel::Create(D3DXVECTOR3(-2000.0f + (5 * 600.0f), 0.0f, 1000.0f + (nCnt * -600.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data\\MODEL\\Rock00.x");
+
+
+	}
+
+	for (int nCnt = 0; nCnt < 5; nCnt++)
+	{
+		// 小さい岩の生成
+		CModel::Create(D3DXVECTOR3(100.0f, 0.0f, 1200.0f + (nCnt * 200.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data\\MODEL\\Rock01.x");
+		CModel::Create(D3DXVECTOR3(100.0f + (4 * 200.0f), 0.0f, 1200.0f + (nCnt * 200.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data\\MODEL\\Rock01.x");
+		CModel::Create(D3DXVECTOR3(100.0f + (nCnt * 200.0f), 0.0f, 1200.0f + (4 * 200.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data\\MODEL\\Rock01.x");
+
+
 	}
 
 	// ゴールの生成
-	CGoal::Create(D3DXVECTOR3(300.0f, 0.0f, -800.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data\\MODEL\\wall_alpha.x");
+	CGoal::Create(D3DXVECTOR3(400.0f, 0.0f, 1700.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data\\MODEL\\wall_alpha.x");
 
 	//エディットの生成
 	//m_pEdit = CEdit::Create();
