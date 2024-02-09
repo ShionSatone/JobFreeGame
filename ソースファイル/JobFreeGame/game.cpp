@@ -43,6 +43,7 @@ bool CGame::m_bEnemySpawnSecond = false;		//敵が出現したか
 CDeathUI *CGame::m_pDeathUI = nullptr;			//死亡UIの情報
 CItemUI *CGame::m_pItemUI = nullptr;			//アイテムUIの情報
 CPoint* CGame::m_pPoint = nullptr;				//ポイントの情報
+//CGimmick* CGame::m_pGimmick[MAX_GIMMICK] = {};	//ギミックの情報
 CGame::GAMEMODE CGame::m_gameMode = GAMEMODE_START;	//ゲームモード
 
 //==============================================================
@@ -85,7 +86,7 @@ HRESULT CGame::Init(void)
 	m_pPlayer = m_pPlayer->Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	// ルクミンの生成
-	for (int nCnt = 0; nCnt < 30; nCnt++)
+	for (int nCnt = 0; nCnt < 10; nCnt++)
 	{
 		m_pLucmin[nCnt] = CLucmin::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
@@ -94,15 +95,13 @@ HRESULT CGame::Init(void)
 	m_pPoint = CPoint::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	// 敵の生成
-	//CEnemy::Create(D3DXVECTOR3(100.0f, 0.0f, 100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	CEnemy::Create(D3DXVECTOR3(100.0f, 0.0f, 500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	// 土の壁の生成
-	CGimmick::Create(D3DXVECTOR3(-500.0f, 100.0f, -500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CGimmick::TYPE_SOILWALL);
-	CGimmick::Create(D3DXVECTOR3(-400.0f, 100.0f, -500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CGimmick::TYPE_SOILWALL);
-	CGimmick::Create(D3DXVECTOR3(-300.0f, 100.0f, -500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CGimmick::TYPE_SOILWALL);
-	CGimmick::Create(D3DXVECTOR3(-200.0f, 100.0f, -500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CGimmick::TYPE_SOILWALL);
-	CGimmick::Create(D3DXVECTOR3(-100.0f, 100.0f, -500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CGimmick::TYPE_SOILWALL);
-	CGimmick::Create(D3DXVECTOR3(0.0f, 100.0f, -500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CGimmick::TYPE_SOILWALL);
+	for (int nCnt = 0; nCnt < 10; nCnt++)
+	{
+		/*m_pGimmick[nCnt] = */CGimmick::Create(D3DXVECTOR3(-500.0f + (nCnt * 100.0f), 100.0f, -500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CGimmick::TYPE_SOILWALL);
+	}
 
 	// ゴールの生成
 	CGoal::Create(D3DXVECTOR3(300.0f, 0.0f, -800.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data\\MODEL\\wall_alpha.x");
@@ -132,10 +131,30 @@ void CGame::Uninit(void)
 	pSound->Stop();
 
 	//プレイヤーの破棄
-	if (m_pPlayer != NULL)
+	if (m_pPlayer != nullptr)
 	{
 		m_pPlayer->Uninit();
-		m_pPlayer = NULL;
+		m_pPlayer = nullptr;
+	}
+
+	// ギミックの破棄
+	/*for (int nCnt = 0; nCnt < MAX_GIMMICK; nCnt++)
+	{
+		if (m_pGimmick[nCnt] != nullptr)
+		{
+			m_pGimmick[nCnt]->Uninit();
+			m_pGimmick[nCnt] = nullptr;
+		}
+	}*/
+
+	// ルクミンの破棄
+	for (int nCnt = 0; nCnt < MAX_LUCMIN; nCnt++)
+	{
+		if (m_pLucmin[nCnt] != nullptr)
+		{
+			m_pLucmin[nCnt]->Uninit();
+			m_pLucmin[nCnt] = nullptr;
+		}
 	}
 
 	////エディターの破棄

@@ -105,6 +105,8 @@ public:
 
 	bool GetIsDeath(void) { return m_bDeath; }	//死亡フラグが立っているか
 
+	virtual int GetLife(void) { return 0; }		//寿命の取得
+
 	static CObject *GetObject(int nIdx) /*{ return m_apObject[nIdx]; }*/;	//オブジェクトの情報取得
 
 protected:

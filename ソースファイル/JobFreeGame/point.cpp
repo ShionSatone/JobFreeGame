@@ -48,7 +48,6 @@ CPoint::CPoint()
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 前回の位置
 	m_col = D3DXCOLOR(0.9f, 0.0f, 0.2f, 1.0f);		// 色
 
-
 	m_state = STATE_NONE;			// 状態
 	m_color = COLOR_NONE;			// 色
 }
@@ -61,7 +60,7 @@ CPoint::CPoint(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_nIdxTexture = -1;
 	m_pos = pos;									// 位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 前回の位置
-	m_col = D3DXCOLOR(0.9f, 0.0f, 0.2f, 1.0f);		// 色
+	m_col = D3DXCOLOR(0.9f, 0.5f, 0.5f, 1.0f);		// 色
 
 
 	m_state = STATE_NONE;			// 状態
@@ -104,7 +103,7 @@ HRESULT CPoint::Init(void)
 	CTexture* pTexture = CManager::GetInstance()->GetTexture();
 
 	//地上テクスチャの読み込み
-	m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\point000.png");
+	m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\point00.png");
 
 	// テクスチャの割り当て
 	CObject3D::BindTexture(m_nIdxTexture);

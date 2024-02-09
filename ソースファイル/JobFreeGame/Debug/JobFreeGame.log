@@ -1,4 +1,4 @@
-﻿  gimmick.cpp
+﻿  game.cpp
 C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(88,70): warning C4100: 'fHeight': 引数は関数の本体部で 1 度も参照されません。
 C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(88,56): warning C4100: 'fWidth': 引数は関数の本体部で 1 度も参照されません。
 C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(88,45): warning C4100: 'pos': 引数は関数の本体部で 1 度も参照されません。
@@ -9,4 +9,5 @@ C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeG
 C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(89,27): warning C4100: 'type': 引数は関数の本体部で 1 度も参照されません。
 C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(90,34): warning C4100: 'rot': 引数は関数の本体部で 1 度も参照されません。
 C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\object.h(91,35): warning C4100: 'size': 引数は関数の本体部で 1 度も参照されません。
+C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\game.cpp(74,10): warning C4189: 'pSound': ローカル変数が初期化されましたが、参照されていません
   JobFreeGame.vcxproj -> C:\Users\student\Desktop\就活作品\JobFreeGame\ソースファイル\JobFreeGame\Debug\JobFreeGame.exe

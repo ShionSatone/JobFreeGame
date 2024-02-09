@@ -67,6 +67,7 @@ public:
 	//D3DXVECTOR3 GetSizeMin(void) { return m_min; }		// ‘å‚«‚³‚ÌÅ‘å’læ“¾
 	//D3DXVECTOR3 GetSizeMax(void) { return m_max; }		// ‘å‚«‚³‚ÌÅ¬’læ“¾
 	STATE GetState(void) { return m_state; }			// ó‘Ôæ“¾
+	int GetLife(void) { return m_nLife; }				// õ–½æ“¾
 
 private:
 

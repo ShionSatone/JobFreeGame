@@ -33,7 +33,7 @@
 #define MAX_STR				(128)		//文字の最大数
 #define MOVE				(6.0f)		//移動量
 #define MOVE_DISTANCE		(200.0f)	//移動距離
-#define FILE_ENEMY			"data\\TXT\\motion_player.txt"		//ルクミンモデルのテキスト
+#define FILE_ENEMY			"data\\TXT\\motion_lucmin.txt"		//ルクミンモデルのテキスト
 
 #define HIT_CNT				(60 * 2)	//攻撃当たるまでのカウント数
 #define DAMAGE_CNT			(9)			//ダメージカウント数
@@ -46,22 +46,25 @@
 int CLucmin::m_nNumAll = 0;						//ルクミンの総数
 char *CLucmin::m_apFileName[PARTS_MAX] =
 {
-	"data\\MODEL\\enemy\\00_body.x",
-	"data\\MODEL\\enemy\\01_head.x",
-	"data\\MODEL\\enemy\\02_hair.x",
-	"data\\MODEL\\enemy\\03_LU_arm.x",
-	"data\\MODEL\\enemy\\04_LD_arm.x",
-	"data\\MODEL\\enemy\\05_L_hand.x",
-	"data\\MODEL\\enemy\\06_RU_arm.x",
-	"data\\MODEL\\enemy\\07_RD_arm.x",
-	"data\\MODEL\\enemy\\08_R_arm.x",
-	"data\\MODEL\\enemy\\09_waist.x",
-	"data\\MODEL\\enemy\\10_LU_leg.x",
-	"data\\MODEL\\enemy\\11_LD_leg.x",
-	"data\\MODEL\\enemy\\12_L_shoe.x",
-	"data\\MODEL\\enemy\\13_RU_leg.x",
-	"data\\MODEL\\enemy\\14_RD_leg.x",
-	"data\\MODEL\\enemy\\15_R_shoe.x",
+	"data\\MODEL\\lucmin\\00_body.x",
+	"data\\MODEL\\lucmin\\01_weist.x",
+	"data\\MODEL\\lucmin\\02_head.x",
+	"data\\MODEL\\lucmin\\03_stem.x",
+	"data\\MODEL\\lucmin\\04_flower.x",
+	"data\\MODEL\\lucmin\\05_armU_R.x",
+	"data\\MODEL\\lucmin\\06_armD_R.x",
+	"data\\MODEL\\lucmin\\07_hand_R.x",
+	"data\\MODEL\\lucmin\\08_armU_L.x",
+	"data\\MODEL\\lucmin\\09_armD_L.x",
+	"data\\MODEL\\lucmin\\10_hand_L.x",
+	"data\\MODEL\\lucmin\\11_footU_R.x",
+	"data\\MODEL\\lucmin\\12_footD_R.x",
+	"data\\MODEL\\lucmin\\13_shoe_R.x",
+	"data\\MODEL\\lucmin\\14_footU_L.x",
+	"data\\MODEL\\lucmin\\15_footD_L.x",
+	"data\\MODEL\\lucmin\\16_shoe_L.x",
+	"data\\MODEL\\lucmin\\17_wing_L.x",
+	"data\\MODEL\\lucmin\\18_wing_R.x",
 
 };
 
@@ -196,7 +199,7 @@ HRESULT CLucmin::Init(void)
 	}
 
 	//モーションの初期化・生成
-	m_pMotion = m_pMotion->Create(m_pMotion->MOTIONTEXT_PLAYER);
+	m_pMotion = m_pMotion->Create(m_pMotion->MOTIONTEXT_LUCMIN);
 	m_pMotion->SetModel(&m_apModel[0], PARTS_MAX);
 	m_pMotion->Init();
 
@@ -207,7 +210,7 @@ HRESULT CLucmin::Init(void)
 	for (int nCntPlayer = 0; nCntPlayer < PARTS_MAX; nCntPlayer++)
 	{
 		//最大値Y
-		if ((nCntPlayer <= PARTS_HEAD) || (nCntPlayer >= PARTS_WAIST && nCntPlayer <= PARTS_L_SHOE))
+		if ((nCntPlayer <= PARTS_HEAD) || (nCntPlayer >= PARTS_WAIST && nCntPlayer <= PARTS_SHOE_L))
 		{
 			m_max.y += m_apModel[nCntPlayer]->GetSizeMax().y;		//最大値加算
 		}
@@ -307,7 +310,7 @@ void CLucmin::Update(void)
 		pPoint->GetState() == CPoint::STATE_WHISTLE &&
 		m_state != STATE_WHISTLE && m_state != STATE_FOLLOW && m_state != STATE_THROW)
 	{
-		if (m_state = STATE_ATTACK)
+		if (m_state == STATE_ATTACK)
 		{ // 攻撃してるとき
 
 			// オブジェクトを NULL にする
@@ -319,6 +322,8 @@ void CLucmin::Update(void)
 				// 何もしてない状態にする
 				m_searchState = SEARCHSTATE_NONE;
 			}
+
+			m_nAttackCounter = ATTACK_INTERVAL;	// カウンター初期化
 		}
 
 		m_state = STATE_WHISTLE;	// 集合してる状態にする
@@ -342,6 +347,9 @@ void CLucmin::Update(void)
 	pDebugProc->Print("ルクミンの向き   (%f, %f, %f)\n", m_rot.x, m_rot.y, m_rot.z);*/
 
 	//pDebugProc->Print("目的の位置   (%f, %f, %f)\n", m_posDest.x, m_posDest.y, m_posDest.z);
+
+	pDebugProc->Print("現在の状態[ %d ]\n", m_state);
+
 
 }
 
@@ -814,10 +822,12 @@ void CLucmin::Search(void)
 					// ルクミンとギミックの距離を求める
 					fLength = (posModel.x - m_pos.x) * (posModel.x - m_pos.x) + (posModel.z - m_pos.z) * (posModel.z - m_pos.z);
 
-					if (fMinLength > fLength)
-					{ // 距離が最短より小さい場合
+					if (fMinLength > fLength &&
+						pObj->GetLife() > 0)
+					{ // 距離が最短より小さい && 寿命がまだある場合
 
 						fMinLength = fLength;		// 最短距離更新
+						m_pObject = nullptr;
 
 						// オブジェクトの情報保存
 						m_pObject = pObj;
@@ -827,7 +837,18 @@ void CLucmin::Search(void)
 
 						// 見つけた状態にする
 						m_searchState = SEARCHSTATE_FIND;
+						m_state = STATE_SEARCH;
 					}
+				}
+			}
+			else
+			{
+				if (m_state == STATE_SEARCH && m_searchState != SEARCHSTATE_FIND)
+				{ // 探し状態のとき
+
+					m_pObject = nullptr;	// オブジェクトの情報を NULL にする
+
+					m_state = STATE_NONE;	// 何もしてない状態にする
 				}
 			}
 		}
@@ -848,10 +869,18 @@ void CLucmin::Attack(void)
 			// ヒット処理
 			m_pObject->Hit();
 
+			if (m_pObject->GetLife() <= 0)
+			{ // ギミックの寿命がない場合
+
+				// NULL を入れる
+				m_pObject = nullptr;
+			}
+
 			m_nAttackCounter = 0;	// カウンター初期化
 
 		}
-		else if(m_pObject == nullptr)
+
+		if(m_pObject == nullptr)
 		{ // オブジェクトが NULL だったら
 
 			if (m_state == STATE_ATTACK)
@@ -861,7 +890,7 @@ void CLucmin::Attack(void)
 				m_state = STATE_SEARCH;
 			}
 
-			m_nAttackCounter = 0;	// カウンター初期化
+			m_nAttackCounter = ATTACK_INTERVAL;	// カウンター初期化
 		}
 	}
 	else

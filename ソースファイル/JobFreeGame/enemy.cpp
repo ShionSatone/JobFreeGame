@@ -42,13 +42,14 @@
 #define ACTION_FRAME		(50)		//2体目以降の敵の行動フレーム
 
 #define MOVE				(1.0f)		// 移動量
+#define SCALE_SUB			(0.003f)	// 拡大率の差分
 
 //静的メンバ変数宣言
 int CEnemy::m_nNumAll = 0;						//敵の総数
 char *CEnemy::m_apFileName[PARTS_MAX] =
 {
-	"data\\MODEL\\enemy\\00_body.x",
-	"data\\MODEL\\enemy\\01_head.x",
+	"data\\MODEL\\enemy\\enemy_boss.x",
+	/*"data\\MODEL\\enemy\\01_head.x",
 	"data\\MODEL\\enemy\\02_hair.x",
 	"data\\MODEL\\enemy\\03_LU_arm.x",
 	"data\\MODEL\\enemy\\04_LD_arm.x",
@@ -62,7 +63,7 @@ char *CEnemy::m_apFileName[PARTS_MAX] =
 	"data\\MODEL\\enemy\\12_L_shoe.x",
 	"data\\MODEL\\enemy\\13_RU_leg.x",
 	"data\\MODEL\\enemy\\14_RD_leg.x",
-	"data\\MODEL\\enemy\\15_R_shoe.x",
+	"data\\MODEL\\enemy\\15_R_shoe.x",*/
 
 };
 
@@ -77,6 +78,8 @@ CEnemy::CEnemy()
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//向き
 	m_max = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//モデルの最大値
 	m_min = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//モデルの最小値
+	m_scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);		// 拡大率
+	m_scaleDest = D3DXVECTOR3(1.0f, 1.0f, 0.5f);	// 目標の拡大率
 
 	for (int nCntEnemy = 0; nCntEnemy < PARTS_MAX; nCntEnemy++)
 	{
@@ -93,6 +96,7 @@ CEnemy::CEnemy()
 
 	m_state = STATE_NONE;			//状態
 	m_enemyState = ENEMYSTATE_NONE;	//止まってる状態
+	m_sceleState = SCALESTATE_REDUCTION;		//拡大率の状態
 	m_nCntDamage = 0;				//ダメージカウンター
 
 	m_nNum = m_nNumAll;
@@ -112,6 +116,8 @@ CEnemy::CEnemy(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_max = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//モデルの最大値
 	m_min = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//モデルの最小値
 	m_rot = rot;		//向き
+	m_scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);		// 拡大率
+	m_scaleDest = D3DXVECTOR3(1.0f, 1.0f, 0.8f);	// 目標の拡大率
 
 	for (int nCntEnemy = 0; nCntEnemy < PARTS_MAX; nCntEnemy++)
 	{
@@ -128,6 +134,7 @@ CEnemy::CEnemy(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 
 	m_state = STATE_NONE;		//状態
 	m_enemyState = ENEMYSTATE_NONE;	//止まってる状態
+	m_sceleState = SCALESTATE_REDUCTION;		//拡大率の状態
 	m_nCntDamage = 0;			//ダメージカウンター
 
 	m_nNum = m_nNumAll;
@@ -177,12 +184,12 @@ HRESULT CEnemy::Init(void)
 	}
 
 	//モーションの初期化・生成
-	m_pMotion = m_pMotion->Create(m_pMotion->MOTIONTEXT_PLAYER);
+	/*m_pMotion = m_pMotion->Create(m_pMotion->MOTIONTEXT_PLAYER);
 	m_pMotion->SetModel(&m_apModel[0], PARTS_MAX);
-	m_pMotion->Init();
+	m_pMotion->Init();*/
 
 	//モデルのファイル読み込み
-	CEnemy::LoadFile();
+	//CEnemy::LoadFile();
 
 	for (int nCnt = 0; nCnt < PARTS_MAX; nCnt++)
 	{
@@ -193,7 +200,7 @@ HRESULT CEnemy::Init(void)
 	for (int nCntPlayer = 0; nCntPlayer < PARTS_MAX; nCntPlayer++)
 	{
 		//最大値Y
-		if ((nCntPlayer <= PARTS_HEAD) || (nCntPlayer >= PARTS_WAIST && nCntPlayer <= PARTS_L_SHOE))
+		//if ((nCntPlayer <= PARTS_HEAD) || (nCntPlayer >= PARTS_WAIST && nCntPlayer <= PARTS_L_SHOE))
 		{
 			m_max.y += m_apModel[nCntPlayer]->GetSizeMax().y;		//最大値加算
 		}
@@ -279,7 +286,7 @@ void CEnemy::Update(void)
 	CEnemy::UpdateFront();
 
 	//モーションの更新処理
-	m_pMotion->Update();
+	//m_pMotion->Update();
 
 	//状態設定
 	for (int nCntEnemy = 0; nCntEnemy < PARTS_MAX; nCntEnemy++)
@@ -317,6 +324,9 @@ void CEnemy::UpdateFront(void)
 
 	//状態更新
 	CEnemy::UpdateState();
+
+	// 拡大率の状態の更新
+	UpdateScaleState();
 
 	//向きの補正
 	CEnemy::RotCorrection();
@@ -382,6 +392,58 @@ void CEnemy::UpdateState(void)
 		break;
 
 	case ENEMYSTATE_DASH:		//ダッシュ状態
+
+		break;
+	}
+}
+
+//==============================================================
+// 拡大率の状態の更新処理
+//==============================================================
+void CEnemy::UpdateScaleState(void)
+{
+	switch (m_sceleState)
+	{
+	case CEnemy::SCALESTATE_NONE:		// 何もしてない状態
+		break;
+
+	case CEnemy::SCALESTATE_REDUCTION:	// 縮小状態
+
+		if (m_scale.z >= m_scaleDest.z)
+		{ // 目標の拡大率になってない場合
+
+			m_scale.z -= SCALE_SUB;
+		}
+		else
+		{
+			// 拡大する状態にする
+			m_sceleState = SCALESTATE_EXPANSION;
+			m_scaleDest.z = 1.0f;
+		}
+
+		break;
+
+	case CEnemy::SCALESTATE_EXPANSION:	// 拡大状態
+
+		if (m_scale.z <= m_scaleDest.z)
+		{ // 目標の拡大率になってない場合
+
+			m_scale.z += SCALE_SUB;
+		}
+		else
+		{
+			// 拡大する状態にする
+			m_sceleState = SCALESTATE_REDUCTION;
+			m_scaleDest.z = 0.8f;
+
+		}
+
+		break;
+	
+	default:
+
+		// 停止する
+		assert(false);
 
 		break;
 	}
@@ -471,10 +533,14 @@ void CEnemy::Screen(void)
 void CEnemy::Draw(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスの取得
-	D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス
+	D3DXMATRIX mtxRot, mtxTrans, mtxScale;	//計算用マトリックス
 
 	//ワールドマトリックスを初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
+
+	//拡大率を反映
+	D3DXMatrixScaling(&mtxScale, m_scale.x, m_scale.y, m_scale.z);
+	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxScale);
 
 	//向きを反映
 	D3DXMatrixRotationYawPitchRoll(&mtxRot, m_rot.y, m_rot.x, m_rot.z);
@@ -487,11 +553,15 @@ void CEnemy::Draw(void)
 	//ワールドマトリックスの設定
 	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
 
+	pDevice->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);
+
 	for (int nCntEnemy = 0; nCntEnemy < PARTS_MAX; nCntEnemy++)
 	{
 		//敵の描画
 		m_apModel[nCntEnemy]->Draw();
 	}
+
+	pDevice->SetRenderState(D3DRS_NORMALIZENORMALS, FALSE);
 }
 
 //==============================================================

@@ -16,6 +16,7 @@
 char *CMotion::m_apFileName[MOTIONTEXT_MAX] =
 {
 	"data\\TXT\\motion_player.txt",
+	"data\\TXT\\motion_lucmin.txt",
 };
 
 //==============================================================

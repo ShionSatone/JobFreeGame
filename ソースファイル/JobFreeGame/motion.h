@@ -30,6 +30,7 @@ public:
 	enum MOTIONTEXT
 	{
 		MOTIONTEXT_PLAYER = 0,		//プレイヤー
+		MOTIONTEXT_LUCMIN,			//ルクミン
 		MOTIONTEXT_MAX
 	};
 

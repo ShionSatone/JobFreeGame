@@ -13,6 +13,7 @@
 //マクロ定義
 //**************************************************************
 #define MAX_LUCMIN		(128)		// ルクミンの最大数
+#define MAX_GIMMICK		(128)		// ギミックの最大数
 
 //**************************************************************
 //前方宣言
@@ -26,6 +27,7 @@ class CEdit;			//エディットの情報
 class CPause;			//ポーズ画面の情報
 class CFade;			//フェード
 class CPoint;			//ポイント
+//class CGimmick;			//ギミック
 
 //**************************************************************
 //ゲーム画面クラスの定義
@@ -52,6 +54,7 @@ public:
 	void Draw(void);
 
 	void SetEnablePause(bool bPouse);			//ポーズ切り替え
+	//static void SetGimmick(CGimmick* pGimmick, int nIdx) { m_pGimmick[nIdx] = pGimmick; }		// ギミックの設定
 
 	static CScore *GetScore(void) { return m_pScore; }			//スコアの情報
 	static CDeathUI *GetDeathUI(void) { return m_pDeathUI; }	//死亡数の情報
@@ -59,10 +62,11 @@ public:
 	static void SetGameMode(GAMEMODE gameMode) { m_gameMode = gameMode; }		//ゲームモードの設定
 	static GAMEMODE GetGameMode(void) { return m_gameMode; }					//ゲームモードの設定
 	static CPlayer *GetPlayer(void) { return m_pPlayer; }		//プレイヤーの情報取得
-	static CLucmin* GetLucmin(int nIdx) { return m_pLucmin[nIdx]; }		//ルクミンのs情報取得
+	static CLucmin* GetLucmin(int nIdx) { return m_pLucmin[nIdx]; }		//ルクミンの情報取得
 	static CPause *GetPause(void) { return m_pPause; }			//ポーズ画面の情報
 	static bool GetPauseDisp(void) { return m_bPause; }			//ポーズしてるか取得
 	static CPoint* GetPoint(void) { return m_pPoint; }			//ポイントの情報
+	//static CGimmick* GetGimmick(int nIdx) { return m_pGimmick[nIdx]; }		//ルクミンの情報取得
 
 private:
 
@@ -74,6 +78,7 @@ private:
 	static CDeathUI *m_pDeathUI;	//死亡UIの情報
 	static CItemUI *m_pItemUI;		//アイテムUIの情報
 	static CPoint* m_pPoint;		//ポイントの情報
+	//static CGimmick* m_pGimmick[MAX_GIMMICK];	//ギミックの情報
 
 	static bool m_bReset;			//リセットしたか
 	static bool m_bPause;			//ポーズ画面か

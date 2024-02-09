@@ -59,27 +59,36 @@ private:
 	enum PARTS
 	{
 		PARTS_BODY = 0,		//[0]体
-		PARTS_HEAD,			//[1]頭
-		PARTS_HAIR,			//[2]髪
-		PARTS_LU_ARM,		//[3]左腕上
-		PARTS_LD_ARM,		//[4]左腕下
-		PARTS_L_HAND,		//[5]左手
-		PARTS_RU_ARM,		//[6]右腕上
-		PARTS_RD_ARM,		//[7]右腕下
-		PARTS_R_HAND,		//[8]右手
-		PARTS_WAIST,		//[9]腰
-		PARTS_LU_LEG,		//[10]左太もも
-		PARTS_LD_LEG,		//[11]左ふくらはぎ
-		PARTS_L_SHOE,		//[12]左靴
-		PARTS_RU_LEG,		//[13]右太もも
-		PARTS_RD_LEG,		//[14]右ふくらはぎ
-		PARTS_R_SHOE,		//[15]右靴
+		//PARTS_HEAD,			//[1]頭
+		//PARTS_HAIR,			//[2]髪
+		//PARTS_LU_ARM,		//[3]左腕上
+		//PARTS_LD_ARM,		//[4]左腕下
+		//PARTS_L_HAND,		//[5]左手
+		//PARTS_RU_ARM,		//[6]右腕上
+		//PARTS_RD_ARM,		//[7]右腕下
+		//PARTS_R_HAND,		//[8]右手
+		//PARTS_WAIST,		//[9]腰
+		//PARTS_LU_LEG,		//[10]左太もも
+		//PARTS_LD_LEG,		//[11]左ふくらはぎ
+		//PARTS_L_SHOE,		//[12]左靴
+		//PARTS_RU_LEG,		//[13]右太もも
+		//PARTS_RD_LEG,		//[14]右ふくらはぎ
+		//PARTS_R_SHOE,		//[15]右靴
 		PARTS_MAX
 	};
 
+	// 拡大率の状態
+	enum SCALESTATE
+	{
+		SCALESTATE_NONE = 0,		// 何もしてない状態
+		SCALESTATE_REDUCTION,		// 縮小する状態
+		SCALESTATE_EXPANSION,		// 拡大する状態
+		SCALESTATE_MAX
+	};
 
 	void UpdateFront(void);			//手前側の更新処理
 	void UpdateState(void);			//状態の更新処理
+	void UpdateScaleState(void);	//拡大率の状態の更新処理
 
 	void Move(void);				// 移動処理
 
@@ -100,6 +109,8 @@ private:
 	D3DXVECTOR3 m_move;		//移動量
 	D3DXVECTOR3 m_rot;		//向き
 	D3DXVECTOR3 m_rotDest;	// 目的の向き
+	D3DXVECTOR3 m_scale;	// 拡大率
+	D3DXVECTOR3 m_scaleDest;	// 目標の拡大率
 
 	D3DXVECTOR3 m_max;		//人間の最大値
 	D3DXVECTOR3 m_min;		//人間の最小値
@@ -113,7 +124,7 @@ private:
 
 	STATE m_state;			//敵の状態
 	ENEMYSTATE m_enemyState;		//敵の動きの状態
-
+	SCALESTATE m_sceleState;		//拡大率の状態
 	int m_nFrameCounter;	//フレーム数カウンタ
 
 	CMotion *m_pMotion;		//モーション情報

@@ -19,6 +19,7 @@
 //**************************************************************
 class CModelHier;	//モデルの階層構造
 class CMotion;		//モーションの階層構造
+class CGimmick;		//ギミックの情報
 
 //**************************************************************
 // ルクミンクラスの定義
@@ -66,7 +67,7 @@ public:
 	void SetPos(D3DXVECTOR3 pos) { m_pos = pos; }		// 位置設定
 	void SetRot(D3DXVECTOR3 rot) { m_rot = rot; }		// 向き設定
 	void SetState(STATE state) { m_state = state; }		// 状態設定
-	void SetGimmickObj(CObject* pObject) { m_pObject = pObject; }		// ギミックのオブジェクト情報設定処理
+	void SetGimmickObj(CObject* pObject) { m_pObject = pObject; }		// ギミックの情報設定処理
 
 	//取得処理
 	D3DXVECTOR3 GetPos(void) { return m_pos; }			// 位置取得
@@ -75,7 +76,7 @@ public:
 	D3DXVECTOR3 GetSizeMin(void) { return m_min; }		// 大きさの最大値取得
 	D3DXVECTOR3 GetSizeMax(void) { return m_max; }		// 大きさの最小値取得
 	STATE GetState(void) { return m_state; }			// 状態取得
-	CObject* GetGimmickObj(void) { return m_pObject; }	// ギミックのオブジェクトの情報取得
+	CObject* GetGimmickObj(void) { return m_pObject; }		// ギミックの情報取得
 
 	int GetNumAll(void) { return m_nNumAll; }			// ルクミンの総数
 
@@ -124,21 +125,25 @@ private:
 	enum PARTS
 	{
 		PARTS_BODY = 0,		// [0]体
-		PARTS_HEAD,			// [1]頭
-		PARTS_HAIR,			// [2]髪
-		PARTS_LU_ARM,		// [3]左腕上
-		PARTS_LD_ARM,		// [4]左腕下
-		PARTS_L_HAND,		// [5]左手
-		PARTS_RU_ARM,		// [6]右腕上
-		PARTS_RD_ARM,		// [7]右腕下
-		PARTS_R_HAND,		// [8]右手
-		PARTS_WAIST,		// [9]腰
-		PARTS_LU_LEG,		// [10]左太もも
-		PARTS_LD_LEG,		// [11]左ふくらはぎ
-		PARTS_L_SHOE,		// [12]左靴
-		PARTS_RU_LEG,		// [13]右太もも
-		PARTS_RD_LEG,		// [14]右ふくらはぎ
-		PARTS_R_SHOE,		// [15]右靴
+		PARTS_WAIST,		// [1]腰
+		PARTS_HEAD,			// [2]頭
+		PARTS_STEM,			// [3]茎
+		PARTS_FLOWER,		// [4]花
+		PARTS_ARMU_R,		// [5]右腕上
+		PARTS_ARMD_R,		// [6]右腕下
+		PARTS_HAND_R,		// [7]右手
+		PARTS_ARMU_L,		// [8]左腕上
+		PARTS_ARMD_L,		// [9]左腕下
+		PARTS_HAND_L,		// [10]左手
+		PARTS_FOOTU_R,		// [11]右太もも
+		PARTS_FOOTD_R,		// [12]右ふくらはぎ
+		PARTS_SHOE_R,		// [13]右足
+		PARTS_FOOTU_L,		// [14]左太もも
+		PARTS_FOOTD_L,		// [15]左ふくらはぎ
+		PARTS_SHOE_L,		// [16]左足
+		PARTS_WING_L,		// [17]左羽
+		PARTS_WING_R,		// [18]右羽
+
 		PARTS_MAX
 	};
 
@@ -193,7 +198,6 @@ private:
 
 	CMotion *m_pMotion;		// モーション情報
 	CObject* m_pObject;		// オブジェクトの情報
-
 };
 
 #endif
