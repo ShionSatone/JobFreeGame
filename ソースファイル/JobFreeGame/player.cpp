@@ -76,11 +76,11 @@ CPlayer::CPlayer()
 
 	for (int nCntPlayer = 0; nCntPlayer < PARTS_MAX; nCntPlayer++)
 	{
-		m_apModel[nCntPlayer] = NULL;		//プレイヤー(パーツ)へのポインタ
+		m_apModel[nCntPlayer] = nullptr;		//プレイヤー(パーツ)へのポインタ
 	}
 
 	m_nNumModel = 0;		//プレイヤー(パーツ)の総数
-	m_pMotion = NULL;
+	m_pMotion = nullptr;
 
 	m_fRotDest = 0.0f;		//目標
 	m_fRotDiff = 0.0f;		//差分
@@ -111,10 +111,10 @@ CPlayer::CPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 
 	for (int nCntPlayer = 0; nCntPlayer < PARTS_MAX; nCntPlayer++)
 	{
-		m_apModel[nCntPlayer] = NULL;		//プレイヤー(パーツ)へのポインタ
+		m_apModel[nCntPlayer] = nullptr;		//プレイヤー(パーツ)へのポインタ
 	}
 
-	m_pMotion = NULL;		//モーションの情報
+	m_pMotion = nullptr;		//モーションの情報
 	m_nNumModel = 0;		//プレイヤー(パーツ)の総数
 
 	//m_bJump = false;		//ジャンプしたか
@@ -224,6 +224,15 @@ HRESULT CPlayer::Init(void)
 	}
 
 	m_max.y += 40.0f;
+
+	//for (int nCntPlayer = 0; nCntPlayer < PARTS_MAX; nCntPlayer++)
+	//{
+	//	//プレイヤーの色設定
+	//	m_apModel[2]->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
+
+	//	//	//状態設定
+	//	m_apModel[2]->SetState(CObjectX::STATE_DAMAGE);		//ダメージ状態にする
+	//}
 
 	SetType(CObject::TYPE_PLAYER);
 

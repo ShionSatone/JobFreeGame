@@ -156,6 +156,9 @@
     <ClCompile Include="goal.cpp">
       <Filter>Map</Filter>
     </ClCompile>
+    <ClCompile Include="edit.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -267,6 +270,9 @@
       <Filter>Lucmin</Filter>
     </ClInclude>
     <ClInclude Include="goal.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="edit.h">
       <Filter>Map</Filter>
     </ClInclude>
   </ItemGroup>

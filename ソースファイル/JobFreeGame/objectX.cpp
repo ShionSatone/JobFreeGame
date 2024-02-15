@@ -161,6 +161,17 @@ void CObjectX::Draw(void)
 			//ƒ}ƒeƒŠƒAƒ‹‚Ìİ’è
 			pDevice->SetMaterial(&m_matColor.MatD3D);
 
+			if (nCntMat == 0)
+			{
+				pDevice->SetMaterial(&m_matColor.MatD3D);
+
+			}
+			else
+			{
+				pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
+
+			}
+
 			break;
 
 		default:

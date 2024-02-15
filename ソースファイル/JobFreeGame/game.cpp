@@ -133,7 +133,7 @@ HRESULT CGame::Init(void)
 	}
 
 	// ゴールの生成
-	CGoal::Create(D3DXVECTOR3(400.0f, 0.0f, 1700.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data\\MODEL\\wall_alpha.x");
+	CGoal::Create(D3DXVECTOR3(400.0f, 0.0f, 1700.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data\\MODEL\\cave.x");
 
 	//エディットの生成
 	//m_pEdit = CEdit::Create();
